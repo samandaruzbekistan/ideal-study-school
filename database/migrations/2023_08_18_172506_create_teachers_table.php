@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->bigInteger('phone');
             $table->string('photo');
+            $table->string('subject');
             $table->timestamps();
         });
 

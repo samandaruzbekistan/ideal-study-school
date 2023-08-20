@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cashier extends Model
+class District extends Model
 {
     use HasFactory;
 
-    public function monthlyPayments()
+    protected $table = 'districts';
+
+    public function students()
     {
-        return $this->hasMany(MonthlyPayment::class);
+        return $this->hasMany(Student::class);
     }
 }

@@ -29,6 +29,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cashier_id');
             $table->foreign('cashier_id')->references('id')->on('cashiers');
             $table->date('date');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();
