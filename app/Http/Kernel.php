@@ -2,6 +2,10 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AdminAuth;
+use App\Http\Middleware\CashierAuth;
+use App\Http\Middleware\CombinedAuth;
+use App\Http\Middleware\TeacherAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,5 +67,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'admin_auth' => AdminAuth::class,
+        'cashier_auth' => CashierAuth::class,
+        'teacher_auth' => TeacherAuth::class,
+        'combined_auth' => CombinedAuth::class,
     ];
 }
