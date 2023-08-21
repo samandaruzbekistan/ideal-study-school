@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,23 +73,25 @@ Route::prefix('cashier')->group(function () {
         Route::get('students', [CashierController::class, 'students'])->name('cashier.students');
         Route::get('student-profile/{id?}', [CashierController::class, 'student'])->name('cashier.student');
         Route::post('classes-add-student', [CashierController::class, 'new_student'])->name('cashier.new.student');
+        Route::post('student-deactivate', [CashierController::class, 'deActiveAttach'])->name('cashier.student.deActiveAttach');
+        Route::get('student-check/{id?}/{date?}/{subject_id?}', [CashierController::class, 'check'])->name('cashier.student.check');
 
         Route::get('student-add-to-subject/{student_id?}', [CashierController::class, 'add_to_subject'])->name('cashier.add_to_subject');
 
 
         Route::get('all-payments',[CashierController::class, 'payments'])->name('cashier.payments.all');
-
-
         Route::post('paid', [CashierController::class, 'paid'])->name('cashier.paid');
-
-        Route::get('getAttachs/{student_id?}', [CashierController::class, 'getAttachs'])->name('cashier.getAttachs');
-
-        Route::get('monthly-payments/{attach_id?}', [CashierController::class, 'getMonthlyPayments'])->name('cashier.payments');
+        Route::get('getPayments/{student_id?}', [CashierController::class, 'getPayments'])->name('cashier.getPayments');
         Route::get('monthly-payment/{payment_id?}', [CashierController::class, 'getPayment'])->name('cashier.getPayment');
+        Route::get('payment-details',[CashierController::class, 'payment_details'])->name('cashier.payment.details');
 
         Route::get('outlays',[CashierController::class, 'outlays'])->name('cashier.outlays');
 
+//        Sms xizmati
         Route::get('sms', [CashierController::class, 'sms'])->name('cashier.sms');
+        Route::post('student-sms', [CashierController::class, 'sendSmsStudent'])->name('cashier.sms.student');
+        Route::post('subject', [CashierController::class, 'subject'])->name('cashier.sms.subject');
+
 
         Route::get('/attendances',[CashierController::class,'attendances'])->name('cashier.attendance.subjects');
 
@@ -101,6 +104,14 @@ Route::prefix('cashier')->group(function () {
 Route::middleware(['combined_auth'])->group(function () {
 //    Student control
     Route::get('search', [CashierController::class, 'search'])->name('cashier.search');
+
+
+    Route::post('update-student', [CashierController::class, 'update_student'])->name('update.student');
+
+    Route::post('sms-send-group', [CashierController::class, 'sms_to_group'])->name('sms.class');
+    Route::post('sms-send-parents', [AdminController::class, 'sms_to_parents'])->name('sms.parents');
+    Route::post('smsBySubject', [AdminController::class, 'smsBySubject'])->name('smsBySubject');
+    Route::post('debt', [TeacherController::class, 'debt'])->name('cashier.sms.debt');
 
     //        Region control
     Route::get('districts/{region_id?}', [CashierController::class,'districts'])->name('cashier.district.regionID');

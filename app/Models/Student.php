@@ -28,4 +28,9 @@ class Student extends Model
     {
         return $this->belongsTo(Quarter::class, 'quarter_id');
     }
+
+    public function monthlyPayments()
+    {
+        return $this->hasMany(MonthlyPayment::class);
+    }
 }

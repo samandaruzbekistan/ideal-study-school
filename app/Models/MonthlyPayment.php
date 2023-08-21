@@ -18,4 +18,9 @@ class MonthlyPayment extends Model
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
+
+    public function monthlyPayments()
+    {
+        return $this->hasMany(MonthlyPayment::class, 'student_id');
+    }
 }

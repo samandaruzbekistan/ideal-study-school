@@ -21,6 +21,13 @@ class StudentRepository
         return Student::where('name', $name)->first();
     }
 
+    public function update_student($name,$phone,$id){
+        $st = Student::find($id);
+        $st->name = $name;
+        $st->phone = $phone;
+        $st->save();
+    }
+
     public function add_student($name,$class_id,$phone, $r_id, $d_id, $q_id){
         $st = new Student;
         $st->name = $name;
@@ -31,5 +38,20 @@ class StudentRepository
         $st->quarter_id = $q_id;
         $st->save();
         return $st->id;
+    }
+
+    public function getStudentWithSubjectsPayments($studentId){
+        return Student::with('class', 'monthlyPayments')->find($studentId);
+    }
+
+    public function getStudentsByName($name){
+        if ($name == '') return [];
+        $users = Student::with('class')->whereRaw('LOWER(students.name) LIKE ?', ['%' . strtolower($name) . '%'])
+            ->get();
+        return $users;
+    }
+
+    public function getClassStudents($class_id){
+        return Student::where('class_id',$class_id)->get();
     }
 }

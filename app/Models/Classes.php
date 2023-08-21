@@ -13,4 +13,25 @@ class Classes extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'class_id');
+    }
+
+
+    public function monthlyPayments()
+    {
+        return $this->hasMany(MonthlyPayment::class, 'class_id');
+    }
+
+    public function notComeDays()
+    {
+        return $this->hasMany(NotComeDays::class, 'class_id');
+    }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'class_id');
+    }
 }

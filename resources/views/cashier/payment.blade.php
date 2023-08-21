@@ -84,22 +84,10 @@
                                 </div>
                                 <div class="row">
                                     <div class="mb-3 col">
-                                        <label class="form-label">Guruh</label>
-                                        <select class="form-select flex-grow-1" id="group">
-                                            <option value="all">Tanlang...</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col">
                                         <label class="form-label">Oy</label>
-                                        <select class="form-select flex-grow-1" id="monthly_payments_select" name="id">
+                                        <select class="form-select flex-grow-1" required id="monthly_payments_select" name="id">
                                             <option value="all">Tanlang...</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="mb-3 col">
-                                        <label class="form-label">To'langan summa</label>
-                                        <input type="number" class="form-control" disabled id="paid" value="0">
                                     </div>
                                     <div class="mb-3 col">
                                         <label class="form-label">Summa</label>
@@ -107,11 +95,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="mb-3 col">
-                                        <label class="form-label">Kelmagan kunlar</label>
-                                        <input type="number" class="form-control" disabled id="days" value="0">
+                                    <div class="mb-3 col-lg-6">
+                                        <label class="form-check m-0">
+                                            <input type="checkbox" name="status" value="1" class="form-check-input">
+                                            <span class="form-check-label">To'liq to'landi</span>
+                                        </label>
                                     </div>
-                                    <div class="mb-3 col">
+                                    <div class="mb-3 col-lg-6">
                                         <label class="form-label d-block">To'lov turi</label>
                                         <label class="d-inline-block form-check me-4">
                                             <input name="type" type="radio" value="cash" class="form-check-input" checked>
@@ -127,12 +117,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-check m-0">
-                                        <input type="checkbox" name="status" value="1" class="form-check-input">
-                                        <span class="form-check-label">To'liq to'landi</span>
-                                    </label>
-                                </div>
+
                                 <button type="button" id="fake-btn" class="btn btn-primary">Qabul qilish</button>
                                 <button type="submit" id="submit-btn" class="d-none">Qabul qilish</button>
                             </form>
@@ -150,7 +135,7 @@
                                 <thead>
                                 <tr>
                                     <th>Ismi</th>
-                                    <th>Guruh</th>
+                                    <th>Sinf</th>
                                     <th>Summa</th>
                                     <th>Turi</th>
                                     <th>Chek</th>
@@ -160,8 +145,8 @@
                                 @foreach($payments as $payment)
                                     <tr>
                                         <td>{{ $payment->student->name }}</td>
-                                        <td>{{ $payment->attach->subject_name }}</td>
-                                        <td>{{ number_format($payment->amount_paid, 0, '.', ' ') }}</td>
+                                        <td>{{ $payment->classes->name }}</td>
+                                        <td>{{ number_format($payment->paid, 0, '.', ' ') }}</td>
                                         @if($payment->type == 'cash')
                                             <td class=""><a href="#" class="badge bg-success me-1 my-1">Naqd</a></td>
                                         @elseif($payment->type == 'credit_card')
@@ -169,7 +154,7 @@
                                         @else
                                             <td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>
                                         @endif
-                                        <td><button payment_id="{{ $payment->id }}" subject="{{ $payment->attach->subject_name }}" amount="{{ number_format($payment->amount_paid, 0, '.', ' ') }}" month="{{ $payment->month }}" name="{{ $payment->student->name }}" date="{{ $payment->date }}" class="btn btn-warning chek-button text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer align-middle me-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>Chek</button></td>
+                                        <td><button payment_id="{{ $payment->id }}" subject="{{ $payment->classes->name }}" amount="{{ number_format($payment->amount_paid, 0, '.', ' ') }}" month="{{ $payment->month }}" name="{{ $payment->student->name }}" date="{{ $payment->date }}" class="btn btn-warning chek-button text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer align-middle me-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>Chek</button></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -208,7 +193,7 @@
 
 
                             for (var i = 0; i < data.length; i++) {
-                                $('#selectUsers').append($('<option></option>').attr('value', data[i].id).text(data[i].name));
+                                $('#selectUsers').append($('<option></option>').attr('value', data[i].id).text(`${data[i].name} ${data[i].class.name}`));
                             }
 
 
@@ -233,23 +218,20 @@
                 $('#search-user').val(selectedName);
                 // Remove the selected option from the select
                 $('#selectUsers').hide();
+                let month = $('#monthly_payments_select');
                 $.ajax({
-                    url: '{{ route('cashier.getAttachs') }}/'+selectedValue, // Replace with your actual API endpoint
+                    url: '{{ route('cashier.getPayments') }}/'+selectedValue, // Replace with your actual API endpoint
                     method: 'GET',
-                    success: function (data) {
-                        // Clear the previous options in the select
-                        $('#group').empty();
-                        $('#group').append($('<option></option>').attr('value', 'all').text('Tanlang...'));
-
-                        for (var i = 0; i < data.length; i++) {
-                            $('#group').append($('<option></option>').attr('value', data[i].id).text(data[i].subject_name));
+                    success: function(monthly_payments) {
+                        month.empty();
+                        month.append($(`<option disabled selected hidden>Tanlang</option>`));
+                        for (var i = 0; i < monthly_payments.length; i++) {
+                            if (monthly_payments[i].status === 0){
+                                // Format the date using moment.js to display month names in Uzbek
+                                var formattedMonth = moment(monthly_payments[i].month).locale('uz').format('MMMM YYYY');
+                                month.append($('<option></option>').attr('value', monthly_payments[i].id).text(formattedMonth));
+                            }
                         }
-
-
-
-                    },
-                    error: function () {
-                        // Handle error here
                     }
                 });
 
@@ -337,28 +319,6 @@
             $('.receip').show();
         });
 
-        $(document).on('change', '#group', function() {
-            let selectedId = $(this).val();
-            let month = $('#monthly_payments_select');
-            if(selectedId !== 'all'){
-                $.ajax({
-                    url: '{{ route('cashier.payments') }}/' + selectedId,
-                    method: 'GET',
-                    success: function(data) {
-                        month.empty();
-                        month.append($('<option></option>').attr('value', 'all').text('Tanlang...'));
-                        for (var i = 0; i < data.monthly_payments.length; i++) {
-                            if (data.monthly_payments[i].status == 0){
-                                // Format the date using moment.js to display month names in Uzbek
-                                var formattedMonth = moment(data.monthly_payments[i].month).locale('uz').format('MMMM YYYY');
-                                month.append($('<option></option>').attr('value', data.monthly_payments[i].id).text(formattedMonth));
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
 
         $(document).on('change', '#monthly_payments_select', function() {
             let selectedPaymentId = $(this).val();
@@ -368,16 +328,15 @@
                 url: '{{ route('cashier.getPayment') }}/' + selectedPaymentId, // Replace with your route to get payment data by ID
                 method: 'GET',
                 success: function(data) {
+                    console.log(data)
                     // Assuming the returned data contains the 'amount' property
-                    let paymentAmount = data.amount;
-                    let paid_amount = data.amount_paid;
-                    let days = data.not_come_days;
+                    let paymentAmount = data.indebtedness;
+                    let paid_amount = data.paid;
+
 
                     // Update the #summa input with the amount
                     $('#summa').val(paymentAmount);
                     $('#summa').prop('max', paymentAmount);
-                    $('#paid').val(paid_amount);
-                    $('#days').val(days);
                 }
             });
         });

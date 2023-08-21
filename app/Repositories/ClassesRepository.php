@@ -22,6 +22,10 @@ class ClassesRepository
         return Classes::where('name', $name)->first();
     }
 
+    public function getClassWithStudents($class_id){
+        return Classes::with('students')->find($class_id);
+    }
+
     public function getTeacherClass($teacher_id){
         return Classes::where('teacher_id', $teacher_id)->first();
     }
