@@ -73,8 +73,8 @@ Route::prefix('cashier')->group(function () {
         Route::get('students', [CashierController::class, 'students'])->name('cashier.students');
         Route::get('student-profile/{id?}', [CashierController::class, 'student'])->name('cashier.student');
         Route::post('classes-add-student', [CashierController::class, 'new_student'])->name('cashier.new.student');
-        Route::post('student-deactivate', [CashierController::class, 'deActiveAttach'])->name('cashier.student.deActiveAttach');
-        Route::get('student-check/{id?}/{date?}/{subject_id?}', [CashierController::class, 'check'])->name('cashier.student.check');
+        Route::post('removeStudent', [CashierController::class, 'removeStudent'])->name('cashier.student.removeStudent');
+        Route::get('student-check/{id?}/{date?}', [CashierController::class, 'check'])->name('cashier.student.check');
 
         Route::get('student-add-to-subject/{student_id?}', [CashierController::class, 'add_to_subject'])->name('cashier.add_to_subject');
 

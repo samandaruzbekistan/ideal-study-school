@@ -54,4 +54,10 @@ class StudentRepository
     public function getClassStudents($class_id){
         return Student::where('class_id',$class_id)->get();
     }
+
+    public function deActivate($student_id){
+        $st = Student::find($student_id);
+        $st->status = 0;
+        $st->save();
+    }
 }

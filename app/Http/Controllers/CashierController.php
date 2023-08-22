@@ -222,13 +222,12 @@ class CashierController extends Controller
         $student = $this->studentRepository->getStudentById($payment->student_id);
         if ($request->amount > $payment->indebtedness) return back()->with('amount_error',1);
         if (!$payment) return back()->with('payment_error',1);
-        if (($request->has('status')) || ($request->amount == $payment->amount)){
-            $amount = $request->amount + $payment->amount_paid;
-            $this->monthlyPaymentRepository->payment($payment->id, 0, $amount,$request->type, 1);
+        if (($request->has('status')) || ($request->amount == $payment->indebtedness)){
+            $this->monthlyPaymentRepository->payment($payment->id, 0, $request->amount,$request->type, 1);
         }
         else{
             $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month, $request->amount);
-            $amount = $payment->amount - $request->amount;
+            $amount = $payment->indebtedness - $request->amount;
             $this->monthlyPaymentRepository->updatePayment($payment->id, $amount);
 //            $amount_paid = $request->amount + $payment->amount_paid;
 //            $amount = $payment->amount - $request->amount;
@@ -275,6 +274,53 @@ class CashierController extends Controller
 //        else return $res;
     }
 
+    public function debt(Request $request){
+        $request->validate([
+            'class_id' => 'required|numeric',
+            'message' => 'required|string',
+            'month' => 'required|string',
+        ]);
+        $students = $this->monthlyPaymentRepository->getDebtStudents($request->month, $request->class_id);
+        $res = $this->smsService->sendSmsSubject($students, $request->message);
+        if($res['status'] == 'success') return back()->with('success',1);
+        else return back()->with('error',1);
+    }
+
+    public function check($id, $date){
+        $newDate = Carbon::createFromFormat('Y-m-d', $date)
+            ->startOfMonth()
+            ->format('Y-m-d');
+        $carbonDate = Carbon::parse($date);
+        $payment = $this->monthlyPaymentRepository->getPaymentByMonth($id, $newDate);
+        if (!$payment) return 'month_error';
+        if ($payment->status == 0){
+            if ($carbonDate->day > 6){
+                return 'payment_error';
+            }
+            else{
+                return 'true';
+            }
+        }
+        return 'true';
+    }
+
+    public function removeStudent(Request $request){
+        $newDate = Carbon::createFromFormat('Y-m-d', $request->date)
+            ->startOfMonth()
+            ->format('Y-m-d');
+        $carbonDate = Carbon::parse($request->date);
+        $payment = $this->monthlyPaymentRepository->getPaymentByMonth($request->student_id, $newDate);
+        if (($payment->status == 0) and ($carbonDate->day < 6)){
+            $this->monthlyPaymentRepository->deleteNowAndNextPayments($newDate, $request->student_id);
+            $this->studentRepository->deActivate($request->student_id);
+            return back()->with('deActivated',1);
+        }
+        if ($payment->status == 1){
+            $this->monthlyPaymentRepository->deleteNextPayments($newDate, $request->student_id);
+            $this->studentRepository->deActivate($request->student_id);
+            return back()->with('deActivated',1);
+        }
+    }
 
 
     //    Region control

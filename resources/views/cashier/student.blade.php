@@ -107,7 +107,7 @@
                                     <table class="table table-striped" >
                                         <thead>
                                             <tr>
-                                                <th>Oy</th>
+                                                <th>O'quv oyi</th>
                                                 <th>Summa</th>
                                                 <th>Sana</th>
                                                 <th>Print</th>

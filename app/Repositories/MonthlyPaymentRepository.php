@@ -73,16 +73,16 @@ class MonthlyPaymentRepository
         return MonthlyPayment::where('student_id',$student_id)->get();
     }
 
-    public function payment($id,$amount,$amount_paid,$type,$status){
+    public function payment($id,$indebtedness,$paid,$type,$status){
         $currentDateTime = Carbon::now('Asia/Tashkent');
         MonthlyPayment::where('id', $id)
             ->update([
-                'indebtedness' => $amount,
-                'paid' => $amount_paid,
+                'indebtedness' => $indebtedness,
+                'paid' => $paid,
                 'type' => $type,
                 'status' => $status,
                 'date' => date('Y-m-d'),
-                'paid_cashier_id' => session('id'),
+                'cashier_id' => session('id'),
                 'created_at' => $currentDateTime
             ]);
     }
@@ -93,6 +93,7 @@ class MonthlyPaymentRepository
         $payment->class_id = $class_id;
         $payment->indebtedness = $indebtedness;
         $payment->month = $month;
+        $payment->cashier_id = session('id');
         $payment->status = 1;
         $payment->date = date('Y-m-d');
         $payment->paid = $paid;
@@ -104,5 +105,31 @@ class MonthlyPaymentRepository
         $payment->indebtedness = $amount;
         $payment->cashier_id  = session('id');
         $payment->save();
+    }
+
+    public function getDebtStudents($month, $subject_id){
+        return MonthlyPayment::query()
+            ->with(['student' => function ($query) {
+                $query->select('id','phone');
+            }])->where('month', $month)->where('class_id', $subject_id)
+            ->where('status', 0)->get();
+    }
+
+    public function getPaymentByMonth($student_id, $month){
+        return MonthlyPayment::where('student_id', $student_id)
+            ->where('month', $month)
+            ->first();
+    }
+
+    public function deleteNowAndNextPayments($monthToDelete,$student_id){
+        MonthlyPayment::where('month', '>=', $monthToDelete)
+            ->where('student_id',$student_id)
+            ->delete();
+    }
+
+    public function deleteNextPayments($monthToDelete,$student_id){
+        MonthlyPayment::where('month', '>', $monthToDelete)
+            ->where('student_id',$student_id)
+            ->delete();
     }
 }

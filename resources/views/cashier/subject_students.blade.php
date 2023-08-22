@@ -214,10 +214,10 @@
                 <div class="col-12 col-xl-6" id="tekshirish" style="display: none">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Guruhdan chiqarish</h4>
+                            <h4 class="card-title">Sinfdan chiqarish</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('cashier.student.deActiveAttach') }}" method="post">
+                            <form action="{{ route('cashier.student.removeStudent') }}" method="post">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label" for="ismi">Ismi</label>
@@ -353,9 +353,8 @@
         $(document).on('click', '#tekshir', function() {
             let StudentID = $('#studentID').val();
             let DateVal = $('#sanasi').val();
-            let SubjectID = $('#subject_id').val();
             $.ajax({
-                url: '{{ route('cashier.student.check') }}/'+StudentID+'/'+DateVal+'/'+SubjectID,
+                url: '{{ route('cashier.student.check') }}/'+StudentID+'/'+DateVal,
                 method: 'GET',
                 success: function (data) {
                     if(data === 'payment_error'){
