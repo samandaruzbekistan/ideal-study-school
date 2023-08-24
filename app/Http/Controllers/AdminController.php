@@ -31,6 +31,7 @@ class AdminController extends Controller
             return back()->with('login_error', 1);
         }
         if (Hash::check($request->input('password'), $admin->password)) {
+            session()->flush();
             session()->put('admin',1);
             session()->put('name',$admin->name);
             session()->put('id',$admin->id);

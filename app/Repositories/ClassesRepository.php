@@ -23,7 +23,9 @@ class ClassesRepository
     }
 
     public function getClassWithStudents($class_id){
-        return Classes::with('students')->find($class_id);
+        return Classes::with(['students' => function ($query) {
+            $query->where('status', 1);
+        }])->find($class_id);
     }
 
     public function getTeacherClass($teacher_id){

@@ -57,6 +57,22 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+Route::prefix('teacher')->group(function () {
+    Route::post('/auth', [TeacherController::class, 'auth'])->name('teacher.auth');
+    Route::middleware(['teacher_auth'])->group(function () {
+        Route::get('home', [TeacherController::class, 'home'])->name('teacher.home');
+        Route::get('logout', [TeacherController::class, 'logout'])->name('teacher.logout');
+        Route::get('profile', [TeacherController::class, 'profile'])->name('teacher.profile');
+        Route::post('update',[TeacherController::class,'update'])->name('teacher.update');
+        Route::post('update-avatar',[TeacherController::class,'update_avatar'])->name('teacher.avatar');
+
+        Route::get('day-detail/{id?}',[TeacherController::class, 'attendance_detail_day'])->name('teacher.attendance.day');
+        Route::post('attendances-check',[TeacherController::class, 'attendance_check'])->name('teacher.attendances.check');
+        Route::get('attendance-detail/{class_id?}/{month?}',[TeacherController::class, 'attendance_detail'])->name('teacher.attendance.detail');
+
+    });
+});
+
 Route::prefix('cashier')->group(function () {
     Route::post('/auth', [CashierController::class, 'auth'])->name('cashier.auth');
     Route::middleware(['cashier_auth'])->group(function () {
@@ -84,8 +100,13 @@ Route::prefix('cashier')->group(function () {
         Route::get('getPayments/{student_id?}', [CashierController::class, 'getPayments'])->name('cashier.getPayments');
         Route::get('monthly-payment/{payment_id?}', [CashierController::class, 'getPayment'])->name('cashier.getPayment');
         Route::get('payment-details',[CashierController::class, 'payment_details'])->name('cashier.payment.details');
+        Route::get('payment-filtr/{date?}',[CashierController::class, 'payment_filtr'])->name('cashier.payment.filtr');
 
+//        Outlay control
         Route::get('outlays',[CashierController::class, 'outlays'])->name('cashier.outlays');
+        Route::post('new-outlay-type',[CashierController::class, 'add_outlay_type'])->name('cashier.outlay.new.type');
+        Route::post('new-outlay',[CashierController::class, 'add_outlay'])->name('cashier.outlay.new');
+        Route::get('get-outlays/{type_id?}',[CashierController::class, 'get_outlays'])->name('cashier.outlays.get');
 
 //        Sms xizmati
         Route::get('sms', [CashierController::class, 'sms'])->name('cashier.sms');
@@ -108,10 +129,10 @@ Route::middleware(['combined_auth'])->group(function () {
 
     Route::post('update-student', [CashierController::class, 'update_student'])->name('update.student');
 
-    Route::post('sms-send-group', [CashierController::class, 'sms_to_group'])->name('sms.class');
+    Route::post('sms-send-group', [CashierController::class, 'sms_to    _group'])->name('sms.class');
     Route::post('sms-send-parents', [AdminController::class, 'sms_to_parents'])->name('sms.parents');
     Route::post('smsBySubject', [AdminController::class, 'smsBySubject'])->name('smsBySubject');
-    Route::post('debt', [TeacherController::class, 'debt'])->name('cashier.sms.debt');
+    Route::post('debt', [CashierController::class, 'debt'])->name('cashier.sms.debt');
 
     //        Region control
     Route::get('districts/{region_id?}', [CashierController::class,'districts'])->name('cashier.district.regionID');

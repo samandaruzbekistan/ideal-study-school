@@ -25,8 +25,8 @@
 <div class="wrapper">
     <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
-            <a class="sidebar-brand" href="/">
-                <span class="align-middle">Ideal Study <br>O'quv markazi</span>
+            <a class="sidebar-brand" href="/admin/home">
+                <span class="align-middle">Ideal Study | NTM</span>
             </a>
 
             <ul class="sidebar-nav">

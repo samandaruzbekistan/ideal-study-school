@@ -464,6 +464,20 @@
         });
         @endif
 
+        @if(session('sms_error') == 1)
+        const notyf = new Notyf();
+
+        notyf.error({
+            message: 'Xabar yuborilmadi. Balansni tekshiring',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+
         @if(session('username_error') == 1)
         const notyf = new Notyf();
 

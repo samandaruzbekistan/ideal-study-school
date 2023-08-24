@@ -157,7 +157,7 @@
                                 <th class="d-none d-xl-table-cell">Vaqti</th>
                                 <th class="d-none d-xl-table-cell">Summa</th>
                                 <th>To'lov turi</th>
-                                <th class="d-none d-md-table-cell">O'qituchi</th>
+                                <th class="d-none d-md-table-cell">Sinf</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -165,7 +165,7 @@
                                     <tr>
                                         <td>{{ $payment->student->name }}</td>
                                         <td class="d-none d-xl-table-cell">{{ $payment->date }}</td>
-                                        <td class="d-none d-xl-table-cell">{{ $payment->amount_paid }}</td>
+                                        <td class="d-none d-xl-table-cell">{{ number_format($payment->paid, 0, '.', ' ') }}</td>
                                         @if($payment->type == 'cash')
                                             <td class=""><a href="#" class="badge bg-success me-1 my-1">Naqd</a></td>
                                         @elseif($payment->type == 'credit_card')
@@ -173,7 +173,7 @@
                                         @else
                                             <td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>
                                         @endif
-                                        <td class="d-none d-md-table-cell">{{ $payment->teacher->name }}</td>
+                                        <td class="d-none d-md-table-cell">{{ $payment->classes->name }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

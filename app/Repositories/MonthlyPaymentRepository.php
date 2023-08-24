@@ -107,6 +107,24 @@ class MonthlyPaymentRepository
         $payment->save();
     }
 
+    public function getPayments(){
+        return MonthlyPayment::query()
+            ->with(['student' => function ($query) {
+                $query->select('id', 'name');
+            }, 'classes' => function ($query) {
+                $query->select('id', 'name');
+            }])->where('date','!=', null)->orderBy('date', 'desc')->paginate(100);
+    }
+
+    public function filtr($date){
+        return MonthlyPayment::query()
+            ->with(['student' => function ($query) {
+                $query->select('id','name');
+            },'classes' => function ($query) {
+                $query->select('id', 'name');
+            }])->where('date', $date)->get();
+    }
+
     public function getDebtStudents($month, $subject_id){
         return MonthlyPayment::query()
             ->with(['student' => function ($query) {

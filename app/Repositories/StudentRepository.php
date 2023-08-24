@@ -7,11 +7,11 @@ use App\Models\Student;
 class StudentRepository
 {
     public function getStudents(){
-        return Student::with('class')->orderBy('name', 'asc')->paginate(100);
+        return Student::with('class')->orderBy('name', 'asc')->where('status',1)->paginate(100);
     }
 
     public function getStudentsAll(){
-        return Student::all();
+        return Student::where('status',1)->get();
     }
     public function getStudentById($id){
         return Student::find($id);
@@ -52,7 +52,7 @@ class StudentRepository
     }
 
     public function getClassStudents($class_id){
-        return Student::where('class_id',$class_id)->get();
+        return Student::where('class_id',$class_id)->where('status',1)->get();
     }
 
     public function deActivate($student_id){

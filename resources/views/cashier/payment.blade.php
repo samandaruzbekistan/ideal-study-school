@@ -4,21 +4,9 @@
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <!-- Add this inside the <head> section of your HTML document -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
 
-        @media print {
-            html, body {
-                height: 99%;
-                margin: 0;
-                padding: 0;
-            }
-            #printContent {
-                page-break-after: always;
-            }
-        }
-    </style>
 @endpush
 
 @section('home')
@@ -36,7 +24,7 @@
                         </div>
                         <div class="card-body border m-1" id="printContent">
                             <div class="row ps-5 pe-5">
-                                <img src="{{ asset('logo.png') }}" class="img-fluid">
+                                <img src="{{ asset('logo-white.png') }}" class="img-fluid">
                             </div>
                             <h1 class="text-center "><b>To'landi</b></h1>
                             <div class="row h4 justify-content-between border-bottom">
@@ -48,11 +36,11 @@
                                 <p class="col mb-0 text-end" id="name">Samandar Sariboyev</p>
                             </div>
                             <div class="row h4 justify-content-between">
-                                <b class="col-3 mb-0">Guruh:</b>
+                                <b class="col-3 mb-0">Sinf:</b>
                                 <p class="col mb-0 text-end" id="subject">English pre intermediate</p>
                             </div>
                             <div class="row h4 justify-content-between">
-                                <b class="col-3 mb-0">Oy:</b>
+                                <b class="col-4 mb-0">O'quv oyi:</b>
                                 <p class="col mb-0 text-end" id="month">Sentabr</p>
                             </div>
                             <div class="row h2 text-center border-bottom border-top">
@@ -63,7 +51,8 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between">
-                            <button type="button" id="download-button" class="btn btn-info"><i class="align-middle" data-feather="download"></i> Yuklab olish</button>
+                            <button type="button" onclick="saveDiv('printContent','Titsle')" class="btn btn-info"><i class="align-middle" data-feather="download"></i> Yuklab olish</button>
+{{--                            <button type="button" id="download-button" class="btn btn-info"><i class="align-middle" data-feather="download"></i> Yuklab olish</button>--}}
                             <button type="button" id="printButton" onClick="printdiv('printContent');" class="btn btn-success"><i class="align-middle" data-feather="printer"></i> Chop etish</button>
                         </div>
                     </div>
@@ -154,7 +143,7 @@
                                         @else
                                             <td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>
                                         @endif
-                                        <td><button payment_id="{{ $payment->id }}" subject="{{ $payment->classes->name }}" amount="{{ number_format($payment->amount_paid, 0, '.', ' ') }}" month="{{ $payment->month }}" name="{{ $payment->student->name }}" date="{{ $payment->date }}" class="btn btn-warning chek-button text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer align-middle me-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>Chek</button></td>
+                                        <td><button payment_id="{{ $payment->id }}" subject="{{ $payment->classes->name }}" amount="{{ number_format($payment->paid, 0, '.', ' ') }}" month="{{ $payment->month }}" name="{{ $payment->student->name }}" date="{{ $payment->date }}" class="btn btn-warning chek-button text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer align-middle me-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>Chek</button></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -170,6 +159,34 @@
 
 @section('js')
     <script>
+        var doc = new jsPDF();
+
+        function saveDiv(divId, title) {
+            doc.fromHTML(`<html><head><title>${title}</title></head><body>` + document.getElementById(divId).innerHTML + `</body></html>`);
+            doc.save('div.pdf');
+            // console.log(doc);
+        }
+
+        function printDiv(divId,
+                          title) {
+
+            let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+
+            mywindow.document.write(`<html><head><title>${title}</title>`);
+            mywindow.document.write('</head><body >');
+            mywindow.document.write(document.getElementById(divId).innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+
+
         $(document).ready(function() {
             // Event listener for the input field
             $('#search-user').on('keyup', function() {
@@ -308,7 +325,7 @@
             $('#qrcode').empty()
             // generate qr code
             var qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: "https://markaz.ideal-study.uz/receip/"+payment_id,
+                text: "https://maktab.ideal-study.uz/receip/"+payment_id,
                 width: 200,
                 height: 200,
                 colorDark : "#000000",

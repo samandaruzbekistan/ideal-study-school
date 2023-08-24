@@ -39,6 +39,7 @@ class CashierController extends Controller
             return back()->with('login_error', 1);
         }
         if (Hash::check($request->input('password'), $cashier->password)) {
+            session()->flush();
             session()->put('cashier',1);
             session()->put('name',$cashier->name);
             session()->put('id',$cashier->id);
@@ -202,6 +203,15 @@ class CashierController extends Controller
         return response()->json($students);
     }
 
+    public function payment_filtr($date){
+        if (!$date) return 'date not detected';
+        return $this->monthlyPaymentRepository->filtr($date);
+    }
+
+    public function payments(){
+        $payments = $this->monthlyPaymentRepository->getPayments();
+        return view('cashier.payments',['payments' => $payments]);
+    }
 
 
     public function getPayments($student_id){
@@ -237,23 +247,44 @@ class CashierController extends Controller
     }
 
 
-
-    public function sendSmsStudent(Request $request){
-        $request->validate([
-            'number' => 'required|numeric|digits:12',
-            'message' => 'required|string'
-        ]);
-        $result = $this->smsService->sendStudent($request->number, $request->message);
-        $jsonEncoded = json_decode($result);
-        if ($jsonEncoded->status != "waiting") return back()->with('sms_error', 1);
-        return back()->with('sms_send',1);
-    }
-
     public function payment_details(Request $request){
         return $this->monthlyPaymentRepository->getPaymentsByMonth($request->month, $request->class_id);
     }
 
 
+
+
+//    Outlay control
+    public function outlays(){
+        $outlays = $this->outlayRepository->getOutlaysWithTypes();
+        $types = $this->outlayRepository->getOutlayTypes();
+        return view('cashier.outlays', ['outlays' => $outlays, 'types' => $types]);
+    }
+
+    public function add_outlay_type(Request $request){
+        $request->validate([
+            'name' => 'required|string'
+        ]);
+        $o = $this->outlayRepository->getOutlayTypeByName($request->name);
+        if ($o) return back()->with('name_error', 1);
+        $this->outlayRepository->addType($request->name);
+        return back()->with('add',1);
+    }
+
+    public function add_outlay(Request $request){
+        $request->validate([
+            'type_id' => 'required|numeric',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            'description' => 'required|string',
+        ]);
+        $this->outlayRepository->addOutlay($request->type_id, $request->amount, $request->date, session('id'), $request->description);
+        return back()->with('success',1);
+    }
+
+    public function get_outlays($type_id){
+        return $this->outlayRepository->get_outlays($type_id);
+    }
 
 
 
@@ -274,6 +305,23 @@ class CashierController extends Controller
 //        else return $res;
     }
 
+
+    public function sms(){
+        $subjects = $this->classesRepository->getAllClasses();
+        return view('cashier.sms',['subjects' => $subjects]);
+    }
+
+    public function sendSmsStudent(Request $request){
+        $request->validate([
+            'number' => 'required|numeric|digits:12',
+            'message' => 'required|string'
+        ]);
+        $result = $this->smsService->sendStudent($request->number, $request->message);
+        $jsonEncoded = json_decode($result);
+        if ($jsonEncoded->status != "waiting") return back()->with('sms_error', 1);
+        return back()->with('sms_send',1);
+    }
+
     public function debt(Request $request){
         $request->validate([
             'class_id' => 'required|numeric',
@@ -283,8 +331,12 @@ class CashierController extends Controller
         $students = $this->monthlyPaymentRepository->getDebtStudents($request->month, $request->class_id);
         $res = $this->smsService->sendSmsSubject($students, $request->message);
         if($res['status'] == 'success') return back()->with('success',1);
-        else return back()->with('error',1);
+        else return back()->with('sms_error',1);
     }
+
+
+
+
 
     public function check($id, $date){
         $newDate = Carbon::createFromFormat('Y-m-d', $date)
@@ -321,6 +373,8 @@ class CashierController extends Controller
             return back()->with('deActivated',1);
         }
     }
+
+
 
 
     //    Region control

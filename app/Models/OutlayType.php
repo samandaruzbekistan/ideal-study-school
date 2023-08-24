@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class OutlayType extends Model
 {
     use HasFactory;
+
+    public function outlays()
+    {
+        return $this->hasMany(Outlay::class, 'type_id');
+    }
 }

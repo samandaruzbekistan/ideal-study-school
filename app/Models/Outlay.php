@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Outlay extends Model
 {
     use HasFactory;
+
+    public function types()
+    {
+        return $this->belongsTo(OutlayType::class, 'type_id');
+    }
 }
