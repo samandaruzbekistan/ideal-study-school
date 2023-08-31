@@ -8,6 +8,7 @@ use App\Repositories\ClassesRepository;
 use App\Repositories\NotComeDaysRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TeacherRepository;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,6 +20,7 @@ class TeacherController extends Controller
         protected AttendanceRepository $attendanceRepository,
         protected NotComeDaysRepository $notComeDaysRepository,
         protected StudentRepository $studentRepository,
+        protected SmsService $smsService
     )
     {
     }
@@ -103,7 +105,9 @@ class TeacherController extends Controller
         if ($att) return back()->with('error',1);
         $attendance_id = $this->attendanceRepository->add($request->class_id,$d,$c);
         $inserted_row = [];
+        $students = [];
         foreach ($selectedStudentIds as $id){
+            $students[] = $this->studentRepository->getStudentById($id);
             $inserted_row[] = [
                 'student_id' => $id,
                 'class_id' => $request->class_id,
@@ -111,6 +115,7 @@ class TeacherController extends Controller
                 'attendance_id' => $attendance_id
             ];
         }
+        $this->smsService->NotifyNotComeStudentParents($students);
         $this->notComeDaysRepository->add($inserted_row);
         return back()->with('success',1);
     }

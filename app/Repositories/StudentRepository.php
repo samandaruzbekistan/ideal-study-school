@@ -28,7 +28,7 @@ class StudentRepository
         $st->save();
     }
 
-    public function add_student($name,$class_id,$phone, $r_id, $d_id, $q_id){
+    public function add_student($name,$class_id,$phone, $r_id, $d_id, $q_id, $date){
         $st = new Student;
         $st->name = $name;
         $st->class_id = $class_id;
@@ -36,6 +36,7 @@ class StudentRepository
         $st->region_id = $r_id;
         $st->district_id = $d_id;
         $st->quarter_id = $q_id;
+        $st->come_date = $date;
         $st->save();
         return $st->id;
     }

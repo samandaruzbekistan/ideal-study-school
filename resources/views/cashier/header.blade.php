@@ -81,6 +81,24 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item @yield('statistics')">
+                    <a class="sidebar-link" href="{{ route('export.payments') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase align-middle me-2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> <span class="align-middle">Statistika</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @yield('statistics')">
+                    <a class="sidebar-link" href="{{ route('export.payments.debt') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle align-middle me-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> <span class="align-middle">Qarzdorlar</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item @yield('salaries')">
+                    <a class="sidebar-link" href="{{ route('cashier.salaries') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share align-middle me-2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> <span class="align-middle">Oldindan oylik</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-header">
                     Xizmatlar
                 </li>

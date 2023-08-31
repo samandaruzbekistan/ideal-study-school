@@ -1,5 +1,7 @@
 <?php
 
+use App\Exports\DebtExport;
+use App\Exports\PaymentsExport;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\TeacherController;
@@ -95,6 +97,10 @@ Route::prefix('cashier')->group(function () {
         Route::get('student-add-to-subject/{student_id?}', [CashierController::class, 'add_to_subject'])->name('cashier.add_to_subject');
 
 
+        Route::get('salaries',[CashierController::class, 'salaries'])->name('cashier.salaries');
+        Route::post('new-salary',[CashierController::class, 'add_salary'])->name('cashier.salary.new');
+
+
         Route::get('all-payments',[CashierController::class, 'payments'])->name('cashier.payments.all');
         Route::post('paid', [CashierController::class, 'paid'])->name('cashier.paid');
         Route::get('getPayments/{student_id?}', [CashierController::class, 'getPayments'])->name('cashier.getPayments');
@@ -125,6 +131,13 @@ Route::prefix('cashier')->group(function () {
 Route::middleware(['combined_auth'])->group(function () {
 //    Student control
     Route::get('search', [CashierController::class, 'search'])->name('cashier.search');
+
+    Route::get('/export/payments', function () {
+        return \Maatwebsite\Excel\Facades\Excel::download(new PaymentsExport, 'payments.xlsx');
+    })->name('export.payments');
+    Route::get('/export/payments/debt', function () {
+        return \Maatwebsite\Excel\Facades\Excel::download(new DebtExport, 'debt.xlsx');
+    })->name('export.payments.debt');
 
 
     Route::post('update-student', [CashierController::class, 'update_student'])->name('update.student');

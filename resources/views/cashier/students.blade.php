@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <label class="form-label">Kelgan sana <span class="text-danger">*</span></label>
-                                        <input name="date" required type="date" value="{{ date('Y-m-d') }}" max="{{ date('Y-m-d') }}"  class="form-control" placeholder="">
+                                        <input name="date" required type="date" value="{{ date('Y-m-d') }}"  class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="row">

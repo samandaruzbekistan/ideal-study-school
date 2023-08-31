@@ -9,6 +9,7 @@ use App\Repositories\ClassesRepository;
 use App\Repositories\DistrictRepository;
 use App\Repositories\MonthlyPaymentRepository;
 use App\Repositories\OutlayRepository;
+use App\Repositories\SalariesRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\TeacherRepository;
 use App\Services\SmsService;
@@ -28,6 +29,7 @@ class CashierController extends Controller
         protected ClassesRepository $classesRepository,
         protected DistrictRepository $districtRepository,
         protected SmsService $smsService,
+        protected SalariesRepository $salariesRepository
     )
     {
     }
@@ -139,7 +141,7 @@ class CashierController extends Controller
             'amount' => 'required|numeric',
             'class_id' => 'required|numeric',
         ]);
-        $student_id = $this->studentRepository->add_student($request->name, $request->class_id,"998{$request->phone}",$request->region_id, $request->district_id, $request->quarter_id);
+        $student_id = $this->studentRepository->add_student($request->name, $request->class_id,"998{$request->phone}",$request->region_id, $request->district_id, $request->quarter_id, $request->date);
         $carbonDate = Carbon::parse($request->date);
         $currentYear = $carbonDate->year;
         $currentMonth = $carbonDate->month;
@@ -284,6 +286,19 @@ class CashierController extends Controller
 
     public function get_outlays($type_id){
         return $this->outlayRepository->get_outlays($type_id);
+    }
+
+
+
+
+
+    public function salaries(){
+        return view('cashier.salary',['salaries' => $this->salariesRepository->getSalaries(), 'teachers' => $this->teacherRepository->getTeachers()]);
+    }
+
+    public function add_salary(Request $request){
+        $this->salariesRepository->add($request->teacher_id, $request->month, $request->amount, $request->date, $request->description, session('id'));
+        return back()->with('success',1);
     }
 
 
