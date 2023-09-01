@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Repositories\AdminRepository;
+use App\Repositories\AttendanceRepository;
 use App\Repositories\CashierRepository;
 use App\Repositories\ClassesRepository;
 use App\Repositories\DistrictRepository;
 use App\Repositories\MonthlyPaymentRepository;
+use App\Repositories\NotComeDaysRepository;
 use App\Repositories\OutlayRepository;
 use App\Repositories\SalariesRepository;
 use App\Repositories\StudentRepository;
@@ -29,7 +31,9 @@ class CashierController extends Controller
         protected ClassesRepository $classesRepository,
         protected DistrictRepository $districtRepository,
         protected SmsService $smsService,
-        protected SalariesRepository $salariesRepository
+        protected SalariesRepository $salariesRepository,
+        protected AttendanceRepository $attendanceRepository,
+        protected NotComeDaysRepository $notComeDaysRepository,
     )
     {
     }
@@ -350,7 +354,18 @@ class CashierController extends Controller
     }
 
 
+//    Attendance control
+    public function attendances(){
+        $subjects = $this->classesRepository->getAllClasses();
+        return view('cashier.attendance', ['classes' => $subjects]);
+    }
 
+    public function attendance($subject_id){
+        $attendances = $this->attendanceRepository->getAttendanceBySubjectId($subject_id, '09');
+        $absentDay = $this->notComeDaysRepository->getTotalAbsentDays($subject_id,'09');
+//        return ['attendances' => $attendances, 'attachs' => $attachs, 'subject_id' => $subject_id];
+        return view('cashier.attendances', ['absentDay'=> $absentDay,'attendances' => $attendances, 'subject_id' => $subject_id]);
+    }
 
 
     public function check($id, $date){

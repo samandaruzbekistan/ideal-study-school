@@ -48,14 +48,21 @@ Route::prefix('admin')->group(function () {
 
         Route::get('students',[AdminController::class,'students'])->name('admin.students');
 
+        //        Sms control
         Route::get('sms', [AdminController::class, 'sms'])->name('admin.sms');
 
-        Route::get('subjects',[AdminController::class,'subjects'])->name('admin.subjects');
+        Route::get('classes',[AdminController::class,'classes'])->name('admin.subjects');
+        Route::get('admin-subject-students/{subject_id?}', [AdminController::class, 'classStudents'])->name('admin.subject.students');
 
         Route::get('/attendances',[AdminController::class,'attendances'])->name('admin.attendance.subjects');
+        Route::get('/attendance/{subject_id?}',[AdminController::class,'attendance'])->name('admin.attendances');
+        Route::get('attendance-detail/{subject_id?}/{month?}',[TeacherController::class, 'attendance_detail'])->name('admin.attendance.detail');
+        Route::get('day-detail/{id?}',[TeacherController::class, 'attendance_detail_day'])->name('admin.attendance.day');
 
         Route::get('outlays',[AdminController::class, 'outlays'])->name('admin.outlays');
+        Route::get('outlays-filtr/{date?}',[AdminController::class, 'outlays_filtr'])->name('admin.outlay.filtr');
 
+        Route::get('salaries',[AdminController::class, 'salaries'])->name('admin.salaries');
     });
 });
 
@@ -104,9 +111,8 @@ Route::prefix('cashier')->group(function () {
         Route::get('all-payments',[CashierController::class, 'payments'])->name('cashier.payments.all');
         Route::post('paid', [CashierController::class, 'paid'])->name('cashier.paid');
         Route::get('getPayments/{student_id?}', [CashierController::class, 'getPayments'])->name('cashier.getPayments');
-        Route::get('monthly-payment/{payment_id?}', [CashierController::class, 'getPayment'])->name('cashier.getPayment');
-        Route::get('payment-details',[CashierController::class, 'payment_details'])->name('cashier.payment.details');
-        Route::get('payment-filtr/{date?}',[CashierController::class, 'payment_filtr'])->name('cashier.payment.filtr');
+
+
 
 //        Outlay control
         Route::get('outlays',[CashierController::class, 'outlays'])->name('cashier.outlays');
@@ -121,7 +127,9 @@ Route::prefix('cashier')->group(function () {
 
 
         Route::get('/attendances',[CashierController::class,'attendances'])->name('cashier.attendance.subjects');
-
+        Route::get('/attendance/{subject_id?}',[CashierController::class,'attendance'])->name('cashier.attendances');
+        Route::get('attendance-detail/{subject_id?}/{month?}',[TeacherController::class, 'attendance_detail'])->name('cashier.attendance.detail');
+        Route::get('day-detail/{id?}',[TeacherController::class, 'attendance_detail_day'])->name('cashier.attendance.day');
 
 
     });
@@ -138,14 +146,19 @@ Route::middleware(['combined_auth'])->group(function () {
     Route::get('/export/payments/debt', function () {
         return \Maatwebsite\Excel\Facades\Excel::download(new DebtExport, 'debt.xlsx');
     })->name('export.payments.debt');
+    Route::get('monthly-payment/{payment_id?}', [CashierController::class, 'getPayment'])->name('cashier.getPayment');
+    Route::get('payment-details',[CashierController::class, 'payment_details'])->name('cashier.payment.details');
 
+    Route::get('payment-filtr/{date?}',[CashierController::class, 'payment_filtr'])->name('cashier.payment.filtr');
 
     Route::post('update-student', [CashierController::class, 'update_student'])->name('update.student');
 
-    Route::post('sms-send-group', [CashierController::class, 'sms_to    _group'])->name('sms.class');
+    Route::post('sms-send-group', [CashierController::class, 'sms_to_group'])->name('sms.class');
     Route::post('sms-send-parents', [AdminController::class, 'sms_to_parents'])->name('sms.parents');
     Route::post('smsBySubject', [AdminController::class, 'smsBySubject'])->name('smsBySubject');
     Route::post('debt', [CashierController::class, 'debt'])->name('cashier.sms.debt');
+    Route::post('teachers-sms',[AdminController::class,'sms_to_teachers'])->name('admin.sms.teachers');
+    Route::post('students-sms',[AdminController::class,'sms_to_students'])->name('admin.sms.students');
 
     //        Region control
     Route::get('districts/{region_id?}', [CashierController::class,'districts'])->name('cashier.district.regionID');

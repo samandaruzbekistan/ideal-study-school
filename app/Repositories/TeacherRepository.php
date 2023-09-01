@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Hash;
 
 class TeacherRepository
 {
+    public function __construct(
+        protected AttendanceRepository $attendanceRepository,
+        protected NotComeDaysRepository $notComeDaysRepository,
+    )
+    {
+    }
+
     public function getTeachers(){
         return Teacher::orderBy('name', 'asc')->get();
     }

@@ -137,7 +137,7 @@ class SmsService
         foreach ($users as $index => $number) {
             $messages[] = [
                 "user_sms_id" => "sms" . ($index + 1),
-                "to" => $number->phone2,
+                "to" => $number->phone,
                 "text" => $message,
             ];
         }

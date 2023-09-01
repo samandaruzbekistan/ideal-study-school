@@ -16,9 +16,6 @@
                             <a class="btn btn-sm btn-light active" data-bs-toggle="list" href="#teachers" role="tab" aria-selected="true">
                                 Ustozlarga
                             </a>
-                            <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#students" role="tab" aria-selected="true">
-                                O'quvchilarga
-                            </a>
 
                             <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#parents" role="tab" aria-selected="true">
                                 Ota onalarga
@@ -33,17 +30,7 @@
                         <div class="tab-pane fade active show " id="teachers" role="tabpanel">
                             <div class="m-3 col-6">
                                 <h6 class="card-title"><span class="text-danger">Ustozlarga</span> sms jo'natish</h6>
-                                <form>
-                                    @csrf
-                                    <textarea required name="message" class="form-control" rows="3" placeholder="Xabar matni"></textarea>
-                                    <input type="submit" class="btn btn-success mt-3" value="Yuborish">
-                                </form>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="students" role="tabpanel">
-                            <div class="m-3 col-6">
-                                <h6 class="card-title"><span class="text-danger">O'quvchilarga</span> sms jo'natish</h6>
-                                <form action="{{ route('admin.sms.students') }}" method="post">
+                                <form action="{{ route('admin.sms.teachers') }}" method="post">
                                     @csrf
                                     <textarea required name="message" class="form-control" rows="3" placeholder="Xabar matni"></textarea>
                                     <input type="submit" class="btn btn-success mt-3" value="Yuborish">
@@ -71,11 +58,6 @@
                                             <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                         @endforeach
                                     </select>
-                                    <select class="form-select mb-3" required name="type" id="monthInput">
-                                        <option selected disabled hidden value="">Kimga yuborilsin</option>
-                                        <option value="students">O'quvchiga</option>
-                                        <option value="parents">Ota-onaga</option>
-                                    </select>
                                     <textarea required name="message" class="form-control" rows="3" placeholder="Xabar matni"></textarea>
                                     <input type="submit" class="btn btn-success mt-3" value="Yuborish">
                                 </form>
@@ -86,6 +68,38 @@
             </div>
         </div>
     </main>
+@endsection
+
+@section('js')
+    <script>
+        @if(session('success') == 1)
+        const notyf = new Notyf();
+
+        notyf.success({
+            message: 'SMS xabar yuborildi',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+
+        @if(session('error') == 1)
+        const notyf = new Notyf();
+
+        notyf.error({
+            message: 'Xatolik! Balansni tekshiring',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+    </script>
 @endsection
 
 
