@@ -251,6 +251,10 @@ class AdminController extends Controller
         return view('admin.salary',['salaries' => $this->salariesRepository->getSalaries(), 'teachers' => $this->teacherRepository->getTeachers()]);
     }
 
+    public function sms(){
+        $subjects = $this->classesRepository->getAllClasses();
+        return view('admin.sms',['subjects' => $subjects]);
+    }
 
     public function sms_to_teachers(Request $request){
         $request->validate([
