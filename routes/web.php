@@ -69,7 +69,8 @@ Route::prefix('admin')->group(function () {
 Route::prefix('teacher')->group(function () {
     Route::post('/auth', [TeacherController::class, 'auth'])->name('teacher.auth');
     Route::middleware(['teacher_auth'])->group(function () {
-        Route::get('home', [TeacherController::class, 'home'])->name('teacher.home');
+        Route::get('classes', [TeacherController::class, 'classes'])->name('teacher.classes');
+        Route::get('home/{id?}', [TeacherController::class, 'home'])->name('teacher.home');
         Route::get('logout', [TeacherController::class, 'logout'])->name('teacher.logout');
         Route::get('profile', [TeacherController::class, 'profile'])->name('teacher.profile');
         Route::post('update',[TeacherController::class,'update'])->name('teacher.update');
@@ -164,3 +165,6 @@ Route::middleware(['combined_auth'])->group(function () {
     Route::get('districts/{region_id?}', [CashierController::class,'districts'])->name('cashier.district.regionID');
     Route::get('quarters/{district_id?}', [CashierController::class,'quarters'])->name('cashier.quarter.districtID');
 });
+
+
+Route::get('pdf/{student_id?}', [\App\Http\Controllers\PDFController::class, 'generatePDF']);

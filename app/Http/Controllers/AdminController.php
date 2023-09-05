@@ -98,13 +98,13 @@ class AdminController extends Controller
         $cash = 0;
         $transfer = 0;
         $credit_card = 0;
-//        if (count($payments_arr) > 0){
-//            foreach ($payments_arr as $item){
-//                if ($item->type == 'cash') $cash = $item->total;
-//                else if ($item->type == 'transfer') $transfer = $item->total;
-//                else $credit_card = $item->total;
-//            }
-//        }
+        if (count($payments_arr) > 0){
+            foreach ($payments_arr as $item){
+                if ($item->type == 'cash') $cash = $item->total;
+                else if ($item->type == 'transfer') $transfer = $item->total;
+                else $credit_card = $item->total;
+            }
+        }
         return view('admin.home', ['payments' => $payments,'outlay' => $outlay,'cash' => $cash, 'credit_card' => $credit_card, 'transfer' => $transfer]);
 //        return view('admin.home');
     }

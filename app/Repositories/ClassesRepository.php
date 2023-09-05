@@ -31,4 +31,8 @@ class ClassesRepository
     public function getTeacherClass($teacher_id){
         return Classes::where('teacher_id', $teacher_id)->first();
     }
+
+    public function getClass($id){
+        return Classes::find($id);
+    }
 }

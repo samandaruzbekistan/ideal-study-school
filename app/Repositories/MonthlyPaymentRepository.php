@@ -105,6 +105,7 @@ class MonthlyPaymentRepository
         $payment->indebtedness = $amount;
         $payment->cashier_id  = session('id');
         $payment->save();
+        return $payment->id;
     }
 
     public function getPayments(){

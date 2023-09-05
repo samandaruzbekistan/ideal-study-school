@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="mb-3 col">
                                         <label class="form-label">Summa</label>
-                                        <input type="number" class="form-control" name="amount" id="summa" max="300000" min="0">
+                                        <input type="text"  oninput="formatPaymentAmount(this)" class="form-control" name="amount" id="summa" max="300000" min="0">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -159,6 +159,18 @@
 
 @section('js')
     <script>
+        function formatPaymentAmount(input) {
+            // Remove existing non-numeric characters
+            const numericValue = input.value.replace(/\D/g, '');
+
+            // Add thousand separators
+            const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+            // Update the input field with the formatted value
+            input.value = formattedValue;
+        }
+
+
         var doc = new jsPDF();
 
         function saveDiv(divId, title) {
@@ -345,15 +357,19 @@
                 url: '{{ route('cashier.getPayment') }}/' + selectedPaymentId, // Replace with your route to get payment data by ID
                 method: 'GET',
                 success: function(data) {
-                    console.log(data)
-                    // Assuming the returned data contains the 'amount' property
-                    let paymentAmount = data.indebtedness;
-                    let paid_amount = data.paid;
+                    if (data.indebtedness !== null) {
+                        let paymentAmount = data.indebtedness.toString(); // Convert to string
+                        let paidAmount = data.paid.toString(); // Convert to string
+
+                        // Format the paymentAmount with thousand separators
+                        const formattedValue = paymentAmount.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+                        // Update the #summa input with the amount
+                        $('#summa').val(formattedValue);
+                        $('#summa').prop('max', paymentAmount);
 
 
-                    // Update the #summa input with the amount
-                    $('#summa').val(paymentAmount);
-                    $('#summa').prop('max', paymentAmount);
+                    }
                 }
             });
         });

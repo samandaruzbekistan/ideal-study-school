@@ -38,7 +38,7 @@ class TeacherController extends Controller
             session()->put('id',$teacher->id);
             session()->put('photo',$teacher->photo);
             session()->put('username',$teacher->username);
-            return redirect()->route('teacher.home');
+            return redirect()->route('teacher.classes');
         }
         else{
             return back()->with('login_error', 1);
@@ -81,11 +81,16 @@ class TeacherController extends Controller
         return view('teacher.profile', ['user' => $admin]);
     }
 
-    public function home(){
-        $classes = $this->classesRepository->getTeacherClass(session('id'));
-        $students = $this->studentRepository->getClassStudents($classes->id);
-        $attendances = $this->attendanceRepository->getAttendanceBySubjectId($classes->id, '09');
-        $absentDay = $this->notComeDaysRepository->getTotalAbsentDays($classes->id,'09');
+    public function classes(){
+        $classes = $this->classesRepository->getAllClasses();
+        return view('teacher.classes', ['classes' => $classes]);
+    }
+
+    public function home($id){
+        $classes = $this->classesRepository->getClass($id);
+        $students = $this->studentRepository->getClassStudents($id);
+        $attendances = $this->attendanceRepository->getAttendanceBySubjectId($id, '09');
+        $absentDay = $this->notComeDaysRepository->getTotalAbsentDays($id,'09');
 
         return view('teacher.attendances', ['class_name'=>$classes->name,'absentDay'=> $absentDay,'attendances' => $attendances, 'students' => $students, 'class_id' => $classes->id]);
 

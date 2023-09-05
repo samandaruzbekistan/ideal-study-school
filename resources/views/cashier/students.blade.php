@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <label class="form-label">Oylik to'lov<span class="text-danger">*</span></label>
-                                        <input type="number" required name="amount" class="form-control">
+                                        <input type="text" oninput="formatPaymentAmount(this)" required name="amount" class="form-control">
                                     </div>
                                     <div class="col-lg-4">
                                         <label class="form-label">Ota-ona telefoni<span class="text-danger">*</span></label>
@@ -218,6 +218,16 @@
             $('.teachers').hide();
         });
 
+        function formatPaymentAmount(input) {
+            // Remove existing non-numeric characters
+            const numericValue = input.value.replace(/\D/g, '');
+
+            // Add thousand separators
+            const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+            // Update the input field with the formatted value
+            input.value = formattedValue;
+        }
 
         @if($errors->any())
         const notyf = new Notyf();

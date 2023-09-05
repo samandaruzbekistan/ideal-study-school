@@ -142,14 +142,16 @@ class CashierController extends Controller
             'region_id' => 'required|numeric',
             'district_id' => 'required|numeric',
             'quarter_id' => 'required|numeric',
-            'amount' => 'required|numeric',
+            'amount' => 'required|string',
             'class_id' => 'required|numeric',
         ]);
-        $student_id = $this->studentRepository->add_student($request->name, $request->class_id,"998{$request->phone}",$request->region_id, $request->district_id, $request->quarter_id, $request->date);
+        $amountString = str_replace([' ', ','], '', $request->input('amount'));
+        $amount = (float) $amountString;
+        $student_id = $this->studentRepository->add_student($request->name, $request->class_id,"998{$request->phone}",$request->region_id, $request->district_id, $request->quarter_id, $request->date, $amount);
         $carbonDate = Carbon::parse($request->date);
         $currentYear = $carbonDate->year;
         $currentMonth = $carbonDate->month;
-        $price = $request->amount;
+        $price = $amount;
         $daysInMonth = $carbonDate->daysInMonth;
         $rowsToInsert = [];
         if ($currentMonth > 8){
@@ -231,20 +233,24 @@ class CashierController extends Controller
     public function paid(Request $request){
         $request->validate([
             'id' => 'required|numeric',
-            'amount' => 'required|numeric',
+            'amount' => 'required|string',
             'type' => 'required|string',
         ]);
+        $amountString = str_replace([' ', ','], '', $request->input('amount'));
+        $amount = (float) $amountString;
         $payment = $this->monthlyPaymentRepository->getPayment($request->id);
         $student = $this->studentRepository->getStudentById($payment->student_id);
-        if ($request->amount > $payment->indebtedness) return back()->with('amount_error',1);
+        if ($amount > $payment->indebtedness) return back()->with('amount_error',1);
         if (!$payment) return back()->with('payment_error',1);
-        if (($request->has('status')) || ($request->amount == $payment->indebtedness)){
-            $this->monthlyPaymentRepository->payment($payment->id, 0, $request->amount,$request->type, 1);
+        if (($request->has('status')) || ($amount == $payment->indebtedness)){
+            $this->monthlyPaymentRepository->payment($payment->id, 0, $amount,$request->type, 1);
+            $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y'), $payment->id);
         }
         else{
-            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month, $request->amount);
-            $amount = $payment->indebtedness - $request->amount;
-            $this->monthlyPaymentRepository->updatePayment($payment->id, $amount);
+            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount);
+            $amount2 = $payment->indebtedness - $amount;
+            $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
+            $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $id);
 //            $amount_paid = $request->amount + $payment->amount_paid;
 //            $amount = $payment->amount - $request->amount;
 //            $this->monthlyPaymentRepository->payment($payment->id, $amount, $amount_paid,$request->type, 0);
