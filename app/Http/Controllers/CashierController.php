@@ -17,6 +17,7 @@ use App\Repositories\TeacherRepository;
 use App\Services\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class CashierController extends Controller
@@ -141,13 +142,21 @@ class CashierController extends Controller
             'phone' => 'required|numeric|digits:9',
             'region_id' => 'required|numeric',
             'district_id' => 'required|numeric',
-            'quarter_id' => 'required|numeric',
             'amount' => 'required|string',
             'class_id' => 'required|numeric',
         ]);
+        if (!empty($request->mahalla)){
+            $quarter_id = DB::table('quarters')->insertGetId([
+                'district_id' => $request->district_id,
+                'name' => $request->mahalla
+            ]);
+        }
+        else{
+            $quarter_id = $request->quarter_id;
+        }
         $amountString = str_replace([' ', ','], '', $request->input('amount'));
         $amount = (float) $amountString;
-        $student_id = $this->studentRepository->add_student($request->name, $request->class_id,"998{$request->phone}",$request->region_id, $request->district_id, $request->quarter_id, $request->date, $amount);
+        $student_id = $this->studentRepository->add_student($request->name, $request->class_id,"998{$request->phone}",$request->region_id, $request->district_id, $quarter_id, $request->date, $amount);
         $carbonDate = Carbon::parse($request->date);
         $currentYear = $carbonDate->year;
         $currentMonth = $carbonDate->month;

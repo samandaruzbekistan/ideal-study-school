@@ -115,10 +115,16 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-sm-4 col-4">
-                                        <label for="quarter" class="form-label">Mahalla</label> <sup class="text-danger">*</sup>
-                                        <select id="quarter" name="quarter_id" required class="form-select">
+                                        <div class="form-check form-switch mb-2" style="display: inline-block">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="is_uzbekistan">
+                                            <label class="form-check-label" for="is_uzbekistan">Mahalla topilmadi</label>
+                                        </div>
+                                        <select id="quarter" name="quarter_id" class="form-select">
                                             <option disabled="" selected="" hidden>Tanlang</option>
                                         </select>
+                                            <div class="" id="mahalla-input" style="display:none;">
+                                                <input type="text" name="mahalla" class="form-control" placeholder="Mahalla nomi">
+                                            </div>
                                     </div>
                                 </div>
                                 <div class=" text-end">
@@ -292,5 +298,18 @@
             $('.teachers').show();
         });
 
+
+        $(document).ready(function() {
+            $('#is_uzbekistan').change(function() {
+                if(this.checked) {
+                    $('#quarter').hide();
+                    $('#mahalla-input').show();
+                }
+                else{
+                    $('#quarter').show();
+                    $('#mahalla-input').hide();
+                }
+            });
+        });
     </script>
 @endsection
