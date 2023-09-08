@@ -25,6 +25,34 @@ class MonthlyPaymentRepository
         return $payments;
     }
 
+    public function filterByTwoDateSumCash($start, $end){
+        $receiptsData = MonthlyPayment::whereBetween('date', [$start, $end])->where('type', 'cash')->get();
+
+        // Calculate the sum of 'amount' column
+        return $receiptsData->sum('paid');
+    }
+
+    public function filterByTwoDateSumBank($start, $end){
+        $receiptsData = MonthlyPayment::whereBetween('date', [$start, $end])->where('type', 'transfer')->get();
+
+        // Calculate the sum of 'amount' column
+        return $receiptsData->sum('paid');
+    }
+
+    public function filterByTwoDateSumCard($start, $end){
+        $receiptsData = MonthlyPayment::whereBetween('date', [$start, $end])->where('type', 'credit_card')->get();
+
+        // Calculate the sum of 'amount' column
+        return $receiptsData->sum('paid');
+    }
+
+    public function filterByTwoDate($start, $end){
+        $receiptsData = MonthlyPayment::whereBetween('date', [$start, $end])->where('type', 'cash')->get();
+
+        // Calculate the sum of 'amount' column
+        return $receiptsData->sum('paid');
+    }
+
     public function getPaidPaymentsByMonth($class_id){
         $payments_success = MonthlyPayment::where('class_id', $class_id)
             ->where('paid','>',0)

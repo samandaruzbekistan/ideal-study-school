@@ -147,6 +147,11 @@ Route::middleware(['combined_auth'])->group(function () {
     Route::get('/export/payments/debt', function () {
         return \Maatwebsite\Excel\Facades\Excel::download(new DebtExport, 'debt.xlsx');
     })->name('export.payments.debt');
+    Route::view('/export/payment-filter', 'admin.filter')->name('export.filter');
+    Route::get('/payment-filter', [AdminController::class, 'filter'])->name('filter.view');
+    Route::post('/payment-excel', [AdminController::class, 'payment_filter'])->name('filter.excel');
+    Route::post('/payment-outlay', [AdminController::class, 'outlay_filter'])->name('filter.outlay');
+    Route::post('/payment-salary', [AdminController::class, 'salary_filter'])->name('filter.salary');
     Route::get('monthly-payment/{payment_id?}', [CashierController::class, 'getPayment'])->name('cashier.getPayment');
     Route::get('payment-details',[CashierController::class, 'payment_details'])->name('cashier.payment.details');
 

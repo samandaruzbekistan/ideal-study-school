@@ -28,4 +28,11 @@ class SalariesRepository
         $s->cashier_id = $id;
         $s->save();
     }
+
+    public function filterByTwoDateSum($start, $end){
+        $receiptsData = Salary::whereBetween('date', [$start, $end])->get();
+
+        // Calculate the sum of 'amount' column
+        return $receiptsData->sum('amount');
+    }
 }

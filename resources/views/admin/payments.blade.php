@@ -1,6 +1,7 @@
 @extends('admin.header')
 @push('css')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <style>
         .pagination{height:36px;margin:0;padding: 0;}
         .pager,.pagination ul{margin-left:0;*zoom:1}
@@ -54,10 +55,11 @@
                                 <input class="form-control w-25 d-inline" id="filtr" type="date" name="date">
                                 <button class="btn btn-primary add ms-2" id="butt"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter align-middle"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg> Filrlash</button>
                                 <button class="btn btn-danger add ms-2" id="back" style="display: none">Orqaga</button>
+                                <button class="btn btn-success" onclick="ExportToExcel('xlsx')">Excel</button>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="tbl_exporttable_to_xls">
                         <thead>
                         <tr>
                             <th>O'quvchi</th>
@@ -74,7 +76,7 @@
                                 <td>
                                     {{ $payment->student->name }}
                                 </td>
-                                <td><b>{{ number_format($payment->paid, 0, '.', ' ') }}</b> so'm</td>
+                                <td><b>{{ $payment->paid }}</b></td>
                                 <td>{{ $payment->classes->name }}</td>
                                 <td>{{ $payment->date }}</td>
                                 <td>{{ \Carbon\Carbon::parse($payment->month)->format('F Y') }}</td>
@@ -101,6 +103,16 @@
 
 @section('js')
     <script>
+
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('tbl_exporttable_to_xls');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('xisobot.' + (type || 'xlsx')));
+        }
+
+
         (function (factory) {
             if (typeof define === 'function' && define.amd) {
                 define(['moment'], factory); // AMD
@@ -169,10 +181,6 @@
                     tableBody.empty();
                     response.forEach(payment => {
                         let formattedMonth = moment(payment.month).locale('uz').format('MMMM YYYY');
-                        const formattedAmount = payment.paid.toLocaleString('en-US', {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0
-                        });
                         let typeMoney = '';
                         console.log(payment.type)
                         if (payment.type === 'cash'){
@@ -187,7 +195,7 @@
                         const newRow = `
                             <tr>
                                 <td>${payment.student.name}</td>
-                                <td><b>${formattedAmount}</b> so'm</td>
+                                <td><b>${payment.paid}</b></td>
                                 <td>${payment.classes.name}</td>
                                 <td>${payment.date}</td>
                                 <td>${formattedMonth}</td>

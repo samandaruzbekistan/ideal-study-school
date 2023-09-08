@@ -62,4 +62,10 @@ class StudentRepository
         $st->status = 0;
         $st->save();
     }
+
+    public function getStudentName($name, $class_id){
+        return Student::where('name', $name)
+            ->where('class_id', $class_id)
+            ->find();
+    }
 }

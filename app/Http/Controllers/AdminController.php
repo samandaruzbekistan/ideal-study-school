@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OutlayExport;
+use App\Exports\PaymentFilter;
+use App\Exports\SalaryExport;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\AdminRepository;
 use App\Repositories\AttendanceRepository;
@@ -16,6 +19,7 @@ use App\Repositories\TeacherRepository;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -245,6 +249,38 @@ class AdminController extends Controller
         return $outlays;
     }
 
+
+    public function payment_filter(Request $request){
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
+        return Excel::download(new PaymentFilter($startDate,$endDate), 'tolovlar.xlsx');
+    }
+
+    public function outlay_filter(Request $request){
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
+        return Excel::download(new OutlayExport($startDate,$endDate), 'xarajatlar.xlsx');
+    }
+
+    public function salary_filter(Request $request){
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
+        return Excel::download(new SalaryExport($startDate,$endDate), 'oyliklar.xlsx');
+    }
+
+    public function filter(Request $request){
+        $request->validate([
+            'start' => 'required',
+            'end' => 'required',
+        ]);
+        $payments_cash = $this->monthlyPaymentRepository->filterByTwoDateSumCash($request->start, $request->end);
+        $payments_card = $this->monthlyPaymentRepository->filterByTwoDateSumCard($request->start, $request->end);
+        $payments_bank = $this->monthlyPaymentRepository->filterByTwoDateSumBank($request->start, $request->end);
+        $outlay = $this->outlayRepository->filterByTwoDateSum($request->start, $request->end);
+        $salary = $this->salariesRepository->filterByTwoDateSum($request->start, $request->end);
+
+        return view('admin.filter', ['end'=> $request->end,'start'=> $request->start, 'payments_bank' => $payments_bank,'payments_cash' => $payments_cash,'payments_card' => $payments_card, 'outlay' => $outlay, 'salary' => $salary]);
+    }
 
 
     public function salaries(){
