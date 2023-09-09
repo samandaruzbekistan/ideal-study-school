@@ -256,7 +256,7 @@ class CashierController extends Controller
             $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y'), $payment->id);
         }
         else{
-            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount);
+            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type);
             $amount2 = $payment->indebtedness - $amount;
             $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
             $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $id);

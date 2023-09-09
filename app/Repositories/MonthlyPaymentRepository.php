@@ -115,7 +115,7 @@ class MonthlyPaymentRepository
             ]);
     }
 
-    public function addPayment($student_id, $class_id, $indebtedness,$month, $paid){
+    public function addPayment($student_id, $class_id, $indebtedness,$month, $paid, $type){
         $payment = new MonthlyPayment;
         $payment->student_id = $student_id;
         $payment->class_id = $class_id;
@@ -125,6 +125,7 @@ class MonthlyPaymentRepository
         $payment->status = 1;
         $payment->date = date('Y-m-d');
         $payment->paid = $paid;
+        $payment->type = $type;
         $payment->save();
     }
 
