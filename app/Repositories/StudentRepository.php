@@ -48,7 +48,7 @@ class StudentRepository
 
     public function getStudentsByName($name){
         if ($name == '') return [];
-        $users = Student::with('class')->whereRaw('LOWER(students.name) LIKE ?', ['%' . strtolower($name) . '%'])
+        $users = Student::with('class')->where('status', 0)->whereRaw('LOWER(students.name) LIKE ?', ['%' . strtolower($name) . '%'])
             ->get();
         return $users;
     }
