@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\MonthlyPayment;
 use App\Models\NotComeDays;
 use Illuminate\Support\Facades\DB;
 
@@ -33,5 +34,17 @@ class NotComeDaysRepository
             }])
             ->where('attendance_id', $id)
             ->get();
+    }
+
+    public function deleteStudentDays($id){
+        NotComeDays::where('student_id', $id)
+            ->delete();
+    }
+
+    public function update_class($student_id,$class_id){
+        NotComeDays::where('student_id', $student_id)
+            ->update([
+                'class_id' => $class_id
+            ]);
     }
 }

@@ -125,9 +125,10 @@ class CashierController extends Controller
 
     public function classStudents($class_id){
         $classes = $this->classesRepository->getClassWithStudents($class_id);
+        $classes_2 = $this->classesRepository->getAllClasses();
         $payments = $this->monthlyPaymentRepository->monthPaymentsBySubjectId($class_id);
         $payments_success = $this->monthlyPaymentRepository->getPaidPaymentsByMonth($class_id);
-        return view('cashier.subject_students',['class_id'=>$class_id,'classes' => $classes, 'payments' => $payments,'payments_success' => $payments_success]);
+        return view('cashier.subject_students',['class_id'=>$class_id,'classes' => $classes,'transfer_classes' => $classes_2, 'payments' => $payments,'payments_success' => $payments_success]);
     }
 
     public function students(){
@@ -205,6 +206,23 @@ class CashierController extends Controller
         return view('cashier.student', ['student' => $student]);
     }
 
+    public function delete_student($id){
+        $student_payments = $this->monthlyPaymentRepository->getPaidPaymentByStudentId($id);
+        if (count($student_payments) == 0){
+            $this->monthlyPaymentRepository->deletePaymentsByStudentId($id);
+            $this->notComeDaysRepository->deleteStudentDays($id);
+            $this->studentRepository->delete_student($id);
+            return back()->with('delete', 1);
+        }
+        return back()->with('not_delete', 1);
+    }
+
+    public function transfer_student(Request $request){
+        $this->monthlyPaymentRepository->update_class($request->student_id,$request->class_id);
+        $this->studentRepository->update_class($request->student_id, $request->class_id);
+        return back()->with('transfer',1);
+    }
+
     public function update_student(Request $request){
         $request->validate([
             'name' => 'required|string',
@@ -227,6 +245,7 @@ class CashierController extends Controller
 
     public function payments(){
         $payments = $this->monthlyPaymentRepository->getPayments();
+//        return $payments;
         return view('cashier.payments',['payments' => $payments]);
     }
 
@@ -256,13 +275,13 @@ class CashierController extends Controller
             $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y'), $payment->id);
         }
         else{
-            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type);
+//            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type);
+//            $amount2 = $payment->indebtedness - $amount;
+//            $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
+            $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $request->id);
+            $amount_paid = $amount + $payment->paid;
             $amount2 = $payment->indebtedness - $amount;
-            $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
-            $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $id);
-//            $amount_paid = $request->amount + $payment->amount_paid;
-//            $amount = $payment->amount - $request->amount;
-//            $this->monthlyPaymentRepository->payment($payment->id, $amount, $amount_paid,$request->type, 0);
+            $this->monthlyPaymentRepository->payment($payment->id, $amount2, $amount_paid,$request->type, 0);
         }
         return redirect()->route('cashier.home')->with('success',1);;
     }

@@ -63,6 +63,10 @@ Route::prefix('admin')->group(function () {
         Route::get('outlays-filtr/{date?}',[AdminController::class, 'outlays_filtr'])->name('admin.outlay.filtr');
 
         Route::get('salaries',[AdminController::class, 'salaries'])->name('admin.salaries');
+
+        Route::get('admin_outlay',[AdminController::class, 'admin_outlay'])->name('admin.outlay');
+        Route::post('admin_outlay-new',[AdminController::class, 'admin_new_outlay'])->name('admin.new.outlay');
+        Route::get('admin_outlay-delete/{id?}',[AdminController::class, 'admin_delete_outlay'])->name('admin.delete.outlay');
     });
 });
 
@@ -101,6 +105,7 @@ Route::prefix('cashier')->group(function () {
         Route::post('classes-add-student', [CashierController::class, 'new_student'])->name('cashier.new.student');
         Route::post('removeStudent', [CashierController::class, 'removeStudent'])->name('cashier.student.removeStudent');
         Route::get('student-check/{id?}/{date?}', [CashierController::class, 'check'])->name('cashier.student.check');
+        Route::post('student-transfer', [CashierController::class, 'transfer_student'])->name('cashier.student.transfer');
 
         Route::get('student-add-to-subject/{student_id?}', [CashierController::class, 'add_to_subject'])->name('cashier.add_to_subject');
 
@@ -138,6 +143,8 @@ Route::prefix('cashier')->group(function () {
 
 
 Route::middleware(['combined_auth'])->group(function () {
+    Route::get('student-delete/{id?}', [CashierController::class, 'delete_student'])->name('student.delete');
+
 //    Student control
     Route::get('search', [CashierController::class, 'search'])->name('cashier.search');
 

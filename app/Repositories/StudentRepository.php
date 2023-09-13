@@ -48,9 +48,14 @@ class StudentRepository
 
     public function getStudentsByName($name){
         if ($name == '') return [];
-        $users = Student::with('class')->where('status', 0)->whereRaw('LOWER(students.name) LIKE ?', ['%' . strtolower($name) . '%'])
+        $users = Student::with('class')->whereRaw('LOWER(students.name) LIKE ?', ['%' . strtolower($name) . '%'])
+            ->where('status', 1)
             ->get();
         return $users;
+    }
+
+    public function delete_student($id){
+        Student::where('id', $id)->delete();
     }
 
     public function getClassStudents($class_id){
@@ -61,6 +66,13 @@ class StudentRepository
         $st = Student::find($student_id);
         $st->status = 0;
         $st->save();
+    }
+
+    public function update_class($student_id, $class_id){
+        Student::where('id', $student_id)
+            ->update([
+                'class_id' => $class_id
+            ]);
     }
 
     public function getStudentName($name, $class_id){

@@ -46,6 +46,13 @@ class MonthlyPaymentRepository
         return $receiptsData->sum('paid');
     }
 
+    public function filterByTwoDateSumClick($start, $end){
+        $receiptsData = MonthlyPayment::whereBetween('date', [$start, $end])->where('type', 'click')->get();
+
+        // Calculate the sum of 'amount' column
+        return $receiptsData->sum('paid');
+    }
+
     public function filterByTwoDate($start, $end){
         $receiptsData = MonthlyPayment::whereBetween('date', [$start, $end])->where('type', 'cash')->get();
 
@@ -94,11 +101,19 @@ class MonthlyPaymentRepository
     }
 
     public function getPaymentsByDate($date){
-        return MonthlyPayment::with('student','classes')->where('date', $date)->latest()->get();
+        return MonthlyPayment::with('student','classes')->where('date', $date)->orderBy('updated_at', 'asc')->get();
     }
 
     public function getPaymentByStudentId($student_id){
         return MonthlyPayment::where('student_id',$student_id)->get();
+    }
+
+    public function getPaidPaymentByStudentId($student_id){
+        return MonthlyPayment::where('student_id',$student_id)->where('status',1)->get();
+    }
+
+    public function deletePaymentsByStudentId($id){
+        MonthlyPayment::where('student_id', $id)->delete();
     }
 
     public function payment($id,$indebtedness,$paid,$type,$status){
@@ -112,6 +127,13 @@ class MonthlyPaymentRepository
                 'date' => date('Y-m-d'),
                 'cashier_id' => session('id'),
                 'created_at' => $currentDateTime
+            ]);
+    }
+
+    public function update_class($student_id, $class_id){
+        MonthlyPayment::where('student_id', $student_id)
+            ->update([
+                'class_id' => $class_id
             ]);
     }
 
@@ -143,7 +165,9 @@ class MonthlyPaymentRepository
                 $query->select('id', 'name');
             }, 'classes' => function ($query) {
                 $query->select('id', 'name');
-            }])->where('date','!=', null)->orderBy('date', 'desc')->paginate(100);
+            }])->where('date','!=', null)->orderBy('date', 'desc')
+            ->groupBy('student_id', 'month')
+            ->paginate(100);
     }
 
     public function filtr($date){

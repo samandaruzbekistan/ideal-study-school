@@ -61,7 +61,8 @@
                         <thead>
                         <tr>
                             <th>O'quvchi</th>
-                            <th>Narxi</th>
+                            <th>Summa</th>
+                            <th>Qarzdorlik</th>
                             <th>Guruh</th>
                             <th>Sana</th>
                             <th>O'quv oyi</th>
@@ -74,7 +75,8 @@
                                 <td>
                                     <a href="{{ route('cashier.student') }}/{{ $payment->student->id }}">{{ $payment->student->name }}</a>
                                 </td>
-                                <td><b>{{ number_format($payment->amount_paid, 0, '.', ' ') }}</b> so'm</td>
+                                <td><b>{{ number_format($payment->paid, 0, '.', ' ') }}</b> so'm</td>
+                                <td><b class="text-danger">{{ number_format($payment->indebtedness, 0, '.', ' ') }}</b> so'm</td>
                                 <td>{{ $payment->classes->name }}</td>
                                 <td>{{ $payment->date }}</td>
                                 <td>{{ \Carbon\Carbon::parse($payment->month)->format('F Y') }}</td>
@@ -82,6 +84,8 @@
                                     <td class=""><a href="#" class="badge bg-success me-1 my-1">Naqd</a></td>
                                 @elseif($payment->type == 'credit_card')
                                     <td class=""><a href="#" class="badge bg-warning text-dark me-1 my-1">Karta</a></td>
+                                @elseif($payment->type == 'click')
+                                    <td class=""><a href="#" class="badge bg-info me-1 my-1">Click</a></td>
                                 @else
                                     <td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>
                                 @endif
@@ -179,6 +183,9 @@
                         }
                         else if(payment.type === 'credit_card'){
                             typeMoney = `<td class=""><a href="#" class="badge bg-warning text-dark me-1 my-1">Karta</a></td>`;
+                        }
+                        else if(payment.type === 'click'){
+                            typeMoney = `<td class=""><a href="#" class="badge bg-info me-1 my-1">Click</a></td>`;
                         }
                         else{
                             typeMoney = `<td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>`;

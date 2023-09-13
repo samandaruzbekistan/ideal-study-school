@@ -44,6 +44,39 @@
 @endsection
 @section('section')
 
+    <main class="content edit-forma" style="padding-bottom: 0; display: none">
+        <div class="container-fluid p-0">
+            <div class="col-md-8 col-xl-9">
+                <div class="">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0"><span id="st_name" class="text-danger"></span> ni boshqa sinfga ko'chirish</h5>
+                        </div>
+                        <div class="card-body h-100">
+                            <form action="{{ route('cashier.student.transfer') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="student_id" id="student_id">
+                                <div class="mb-3">
+                                    <label for="district" class="form-label">Sinf</label> <sup class="text-danger">*</sup>
+                                    <select  name="class_id" required class="form-select">
+                                        <option disabled="" selected="" hidden>Tanlang</option>
+                                        @foreach($transfer_classes as $class)
+                                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class=" text-end">
+                                    <button type="button" class="btn btn-danger cancel1">Bekor qilish</button>
+                                    <button type="submit" class="btn btn-success">Ko'chirish</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <main class="content teachers">
         <div class="container-fluid p-0 ">
             <div class="col-12 col-xl-12" id="datas">
@@ -134,7 +167,8 @@
                                     <th>#</th>
                                     <th>F.I.Sh</th>
                                     <th class="d-none d-sm-table-cell">Telefon</th>
-                                    <th>Guruhdan chiqarish</th>
+                                    <th>Sinf chiqarish</th>
+                                    <th>Ko'chirish</th>
                                 </tr>
                                 </thead>
                                 <tbody id="tbody">
@@ -145,7 +179,8 @@
                                         </td>
                                         <td><a href="{{ route('cashier.student') }}/{{ $student->id }}">{{ $student->name }}</a></td>
                                         <td class="d-none d-sm-table-cell">+{{ preg_replace('/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/', '$1 $2 $3 $4 $5', $student->phone) }}</td>
-                                        <td><button name="{{ $student->name }}" id="{{ $student->id }}" class="btn btn-danger chiqarish"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x align-middle me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg></button></td>
+                                        <td><button name="{{ $student->name }}" id="{{ $student->id }}" class="btn btn-warning text-dark chiqarish"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x align-middle me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg></button></td>
+                                        <td><button id="{{ $student->id }}" ismi="{{ $student->name }}" class="btn btn-info transfer-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw align-middle me-2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></button></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -255,6 +290,22 @@
 
 @section('js')
     <script>
+        $(".transfer-btn").on("click", function() {
+            let id = $(this).attr('id');
+            let ism = $(this).attr('ismi');
+            $('#student_id').val(id);
+            $('#st_name').text(ism);
+            $('.edit-forma').show();
+            $('.teachers').hide();
+        });
+
+        $(".cancel1").on("click", function() {
+            event.stopPropagation();
+            $('.edit-forma').hide();
+            $('.teachers').show();
+        });
+
+
         (function (factory) {
             if (typeof define === 'function' && define.amd) {
                 define(['moment'], factory); // AMD
@@ -450,11 +501,54 @@
             },
         });
         @endif
+
+        @if(session('transfer') == 1)
+        const notyf = new Notyf();
+
+        notyf.success({
+            message: 'O\'quvchi ko\'chirildi!',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+
         @if(session('deActivated') == 1)
         const notyf = new Notyf();
 
         notyf.success({
             message: 'O\'quvchi guruhdan chiqarildi',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+
+        @if(session('delete') == 1)
+        const notyf = new Notyf();
+
+        notyf.success({
+            message: 'O\'quvchi tizimdan o\'chirildi',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+
+        @if(session('not_delete') == 1)
+        const notyf = new Notyf();
+
+        notyf.error({
+            message: 'O\'quvchini o\'chirilmadi. To\'lovlari mavjud',
             duration: 5000,
             dismissible : true,
             position: {

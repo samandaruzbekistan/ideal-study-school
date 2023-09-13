@@ -6,6 +6,7 @@ use App\Exports\OutlayExport;
 use App\Exports\PaymentFilter;
 use App\Exports\SalaryExport;
 use App\Http\Requests\LoginRequest;
+use App\Repositories\AdminOutlayRepository;
 use App\Repositories\AdminRepository;
 use App\Repositories\AttendanceRepository;
 use App\Repositories\CashierRepository;
@@ -35,6 +36,7 @@ class AdminController extends Controller
         protected AttendanceRepository $attendanceRepository,
         protected NotComeDaysRepository $notComeDaysRepository,
         protected SalariesRepository $salariesRepository,
+        protected AdminOutlayRepository $adminOutlayRepository,
     )
     {
     }
@@ -276,10 +278,12 @@ class AdminController extends Controller
         $payments_cash = $this->monthlyPaymentRepository->filterByTwoDateSumCash($request->start, $request->end);
         $payments_card = $this->monthlyPaymentRepository->filterByTwoDateSumCard($request->start, $request->end);
         $payments_bank = $this->monthlyPaymentRepository->filterByTwoDateSumBank($request->start, $request->end);
+        $payments_click = $this->monthlyPaymentRepository->filterByTwoDateSumClick($request->start, $request->end);
+
         $outlay = $this->outlayRepository->filterByTwoDateSum($request->start, $request->end);
         $salary = $this->salariesRepository->filterByTwoDateSum($request->start, $request->end);
 
-        return view('admin.filter', ['end'=> $request->end,'start'=> $request->start, 'payments_bank' => $payments_bank,'payments_cash' => $payments_cash,'payments_card' => $payments_card, 'outlay' => $outlay, 'salary' => $salary]);
+        return view('admin.filter', ['payments_click' => $payments_click,'end'=> $request->end,'start'=> $request->start, 'payments_bank' => $payments_bank,'payments_cash' => $payments_cash,'payments_card' => $payments_card, 'outlay' => $outlay, 'salary' => $salary]);
     }
 
 
@@ -324,6 +328,19 @@ class AdminController extends Controller
         else return back()->with('error',1);
     }
 
+    public function admin_outlay(){
+        $outlay = $this->adminOutlayRepository->getOutlays();
+        return view('admin.adminOutlay', ['outlays' => $outlay]);
+    }
 
+    public function admin_new_outlay(Request $request){
+        $this->adminOutlayRepository->add($request->amount, $request->description,$request->date);
+        return back()->with('success',1);
+    }
+
+    public function admin_delete_outlay($id){
+        $this->adminOutlayRepository->delete_outlay($id);
+        return back()->with('delete',1);
+    }
 
 }

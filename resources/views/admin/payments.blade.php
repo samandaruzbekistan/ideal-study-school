@@ -64,6 +64,7 @@
                         <tr>
                             <th>O'quvchi</th>
                             <th>Summa</th>
+                            <th>Qarzdorlik</th>
                             <th>Guruh</th>
                             <th>Sana</th>
                             <th>O'quv oyi</th>
@@ -77,6 +78,7 @@
                                     {{ $payment->student->name }}
                                 </td>
                                 <td><b>{{ $payment->paid }}</b></td>
+                                <td><b class="text-danger">{{ $payment->indebtedness }}</b></td>
                                 <td>{{ $payment->classes->name }}</td>
                                 <td>{{ $payment->date }}</td>
                                 <td>{{ \Carbon\Carbon::parse($payment->month)->format('F Y') }}</td>
