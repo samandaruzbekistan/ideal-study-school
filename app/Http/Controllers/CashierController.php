@@ -275,13 +275,13 @@ class CashierController extends Controller
             $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y'), $payment->id);
         }
         else{
-//            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type);
-//            $amount2 = $payment->indebtedness - $amount;
-//            $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
-            $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $request->id);
-            $amount_paid = $amount + $payment->paid;
+            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type);
             $amount2 = $payment->indebtedness - $amount;
-            $this->monthlyPaymentRepository->payment($payment->id, $amount2, $amount_paid,$request->type, 0);
+            $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
+            $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $id);
+//            $amount_paid = $amount + $payment->paid;
+//            $amount2 = $payment->indebtedness - $amount;
+//            $this->monthlyPaymentRepository->payment($payment->id, $amount2, $amount_paid,$request->type, 0);
         }
         return redirect()->route('cashier.home')->with('success',1);;
     }

@@ -15,8 +15,8 @@ class SmsService
 
     public function __construct()
     {
-        $this->email = Config::get('app.eskiz_email', 'your@mail.com');
-        $this->password = Config::get('app.eskiz_password', 'password');
+        $this->email = env('ESKIZ_EMAIL');
+        $this->password = env('ESKIZ_PASSWORD');
     }
 
     public function sendStudent($number, $message){
