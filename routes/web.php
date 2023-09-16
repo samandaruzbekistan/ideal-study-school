@@ -91,6 +91,7 @@ Route::prefix('cashier')->group(function () {
     Route::post('/auth', [CashierController::class, 'auth'])->name('cashier.auth');
     Route::middleware(['cashier_auth'])->group(function () {
         Route::get('home', [CashierController::class, 'home'])->name('cashier.home');
+        Route::get('payment', [CashierController::class, 'payment'])->name('cashier.payment');
         Route::get('logout', [CashierController::class, 'logout'])->name('cashier.logout');
         Route::get('profile', [CashierController::class, 'profile'])->name('cashier.profile');
         Route::post('update',[CashierController::class,'update'])->name('cashier.update');

@@ -9,7 +9,7 @@
 
 @endpush
 
-@section('home')
+@section('payment')
     active
 @endsection
 @section('section')

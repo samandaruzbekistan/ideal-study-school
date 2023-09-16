@@ -64,10 +64,30 @@ class CashierController extends Controller
         return redirect()->route('cashier.login');
     }
 
-    public function home(){
+    public function payment(){
         $payments = $this->monthlyPaymentRepository->getPaymentsByDate(date('Y-m-d'));
 //        return $payments;
         return view('cashier.payment', ['payments' => $payments]);
+    }
+
+    public function home(){
+        $payments_arr = $this->monthlyPaymentRepository->monthPaymentsByDateOrderType(date('Y-m-d'));
+        $outlay = $this->outlayRepository->getOutlayByDate(date('Y-m-d'));
+        $payments = $this->monthlyPaymentRepository->getPayments7();
+        $cash = 0;
+        $click = 0;
+        $transfer = 0;
+        $credit_card = 0;
+        if (count($payments_arr) > 0){
+            foreach ($payments_arr as $item){
+                if ($item->type == 'cash') $cash = $item->total;
+                else if ($item->type == 'transfer') $transfer = $item->total;
+                else if ($item->type == 'click') $click = $item->total;
+                else $credit_card = $item->total;
+            }
+        }
+        return view('cashier.home', ['payments' => $payments,'outlay' => $outlay,'click' => $click,'cash' => $cash, 'credit_card' => $credit_card, 'transfer' => $transfer]);
+//        return view('admin.home');
     }
 
     public function profile(){
@@ -283,7 +303,7 @@ class CashierController extends Controller
 //            $amount2 = $payment->indebtedness - $amount;
 //            $this->monthlyPaymentRepository->payment($payment->id, $amount2, $amount_paid,$request->type, 0);
         }
-        return redirect()->route('cashier.home')->with('success',1);;
+        return redirect()->route('cashier.payment')->with('success',1);;
     }
 
 

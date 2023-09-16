@@ -1,4 +1,4 @@
-@extends('admin.header')
+@extends('cashier.header')
 @push('css')
     <link href="{{ asset('css/pagination.css') }}" rel="stylesheet">
     <style>
@@ -117,47 +117,47 @@
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <h5 class="card-title">Перечисление</h5>
-                                        </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Перечисление</h5>
+                                            </div>
 
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle" data-feather="repeat"></i>
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="repeat"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">{{  number_format($transfer, 0, '.', ' ') }}</h1>
-                                    <div class="mb-0">
-                                        <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>Hisob</span>
-                                        <span class="text-muted"> raqamga o'tkazma</span>
+                                        <h1 class="mt-1 mb-3">{{  number_format($transfer, 0, '.', ' ') }}</h1>
+                                        <div class="mb-0">
+                                            <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>Hisob</span>
+                                            <span class="text-muted"> raqamga o'tkazma</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <h5 class="card-title">Xarajat</h5>
-                                        </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Xarajat</h5>
+                                            </div>
 
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart align-middle"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart align-middle"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <h1 class="mt-1 mb-3">{{ number_format($outlay, 0, '.', ' ') }}</h1>
-                                    <div class="mb-0">
-                                        <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>Xarajatlar</span>
-                                        <span class="text-muted"> summasi</span>
+                                        <h1 class="mt-1 mb-3">{{ number_format($outlay, 0, '.', ' ') }}</h1>
+                                        <div class="mb-0">
+                                            <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>Xarajatlar</span>
+                                            <span class="text-muted"> summasi</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                     </div>
@@ -221,21 +221,21 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach($payments as $payment)
-                                    <tr>
-                                        <td>{{ $payment->student->name }}</td>
-                                        <td class="d-none d-xl-table-cell">{{ $payment->date }}</td>
-                                        <td class="d-none d-xl-table-cell">{{ number_format($payment->paid, 0, '.', ' ') }}</td>
-                                        @if($payment->type == 'cash')
-                                            <td class=""><a href="#" class="badge bg-success me-1 my-1">Naqd</a></td>
-                                        @elseif($payment->type == 'credit_card')
-                                            <td class=""><a href="#" class="badge bg-warning text-dark me-1 my-1">Karta</a></td>
-                                        @else
-                                            <td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>
-                                        @endif
-                                        <td class="d-none d-md-table-cell">{{ $payment->classes->name }}</td>
-                                    </tr>
-                                @endforeach
+                            @foreach($payments as $payment)
+                                <tr>
+                                    <td>{{ $payment->student->name }}</td>
+                                    <td class="d-none d-xl-table-cell">{{ $payment->date }}</td>
+                                    <td class="d-none d-xl-table-cell">{{ number_format($payment->paid, 0, '.', ' ') }}</td>
+                                    @if($payment->type == 'cash')
+                                        <td class=""><a href="#" class="badge bg-success me-1 my-1">Naqd</a></td>
+                                    @elseif($payment->type == 'credit_card')
+                                        <td class=""><a href="#" class="badge bg-warning text-dark me-1 my-1">Karta</a></td>
+                                    @else
+                                        <td class=""><a href="#" class="badge bg-danger me-1 my-1">Bank</a></td>
+                                    @endif
+                                    <td class="d-none d-md-table-cell">{{ $payment->classes->name }}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                         <div class="m-2">{{ $payments->links() }}</div>

@@ -35,6 +35,11 @@
 
                 <li class="sidebar-item @yield('home')">
                     <a class="sidebar-link" href="{{ route('cashier.home') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> <span class="align-middle">Bosh sahifa</span>
+                    </a>
+                </li>
+                <li class="sidebar-item @yield('payment')">
+                    <a class="sidebar-link" href="{{ route('cashier.payment') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle align-middle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg> <span class="align-middle">To'lov</span>
                     </a>
                 </li>

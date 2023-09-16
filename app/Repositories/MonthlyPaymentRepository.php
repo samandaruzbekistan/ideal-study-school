@@ -101,7 +101,7 @@ class MonthlyPaymentRepository
     }
 
     public function getPaymentsByDate($date){
-        return MonthlyPayment::with('student','classes')->where('date', $date)->orderBy('updated_at', 'asc')->get();
+        return MonthlyPayment::with('student','classes')->where('date', $date)->orderBy('updated_at', 'desc')->get();
     }
 
     public function getPaymentByStudentId($student_id){
