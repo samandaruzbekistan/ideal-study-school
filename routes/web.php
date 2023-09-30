@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/admin', 'admin.login')->name('admin.login');
 Route::view('/teacher', 'teacher.login')->name('teacher.login');
-Route::view('/cashier', 'cashier.login')->name('cashier.login');
+Route::view('/access-403', 'access')->name('access');
 Route::redirect('/','teacher');
 
 Route::prefix('admin')->group(function () {
@@ -87,9 +87,12 @@ Route::prefix('teacher')->group(function () {
     });
 });
 
+Route::middleware(['access'])->group(function () {
+    Route::view('/cashier', 'cashier.login')->name('cashier.login');
+    Route::post('cashier/auth', [CashierController::class, 'auth'])->name('cashier.auth');
+});
 Route::prefix('cashier')->group(function () {
-    Route::post('/auth', [CashierController::class, 'auth'])->name('cashier.auth');
-    Route::middleware(['cashier_auth'])->group(function () {
+    Route::middleware(['cashier_auth','access'])->group(function () {
         Route::get('home', [CashierController::class, 'home'])->name('cashier.home');
         Route::get('payment', [CashierController::class, 'payment'])->name('cashier.payment');
         Route::get('logout', [CashierController::class, 'logout'])->name('cashier.logout');
