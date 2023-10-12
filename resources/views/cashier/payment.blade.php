@@ -86,6 +86,10 @@
                                         <input type="text"  oninput="formatPaymentAmount(this)" class="form-control" name="amount" id="summa" max="300000" min="0">
                                     </div>
                                 </div>
+                                <div class="mb-3 col">
+                                    <label class="form-label">Izox</label>
+                                    <input type="text" class="form-control" required name="comment"  value="_">
+                                </div>
                                 <div class="row">
                                     <div class="mb-3 col-lg-6">
                                         <label class="form-check m-0">

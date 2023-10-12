@@ -116,7 +116,7 @@ class MonthlyPaymentRepository
         MonthlyPayment::where('student_id', $id)->delete();
     }
 
-    public function payment($id,$indebtedness,$paid,$type,$status){
+    public function payment($id,$indebtedness,$paid,$type,$status, $comment){
         $currentDateTime = Carbon::now('Asia/Tashkent');
         MonthlyPayment::where('id', $id)
             ->update([
@@ -125,6 +125,7 @@ class MonthlyPaymentRepository
                 'type' => $type,
                 'status' => $status,
                 'date' => date('Y-m-d'),
+                'comment' => $comment,
                 'cashier_id' => session('id'),
                 'created_at' => $currentDateTime
             ]);
@@ -137,7 +138,7 @@ class MonthlyPaymentRepository
             ]);
     }
 
-    public function addPayment($student_id, $class_id, $indebtedness,$month, $paid, $type){
+    public function addPayment($student_id, $class_id, $indebtedness,$month, $paid, $type, $comment){
         $payment = new MonthlyPayment;
         $payment->student_id = $student_id;
         $payment->class_id = $class_id;
@@ -148,6 +149,7 @@ class MonthlyPaymentRepository
         $payment->date = date('Y-m-d');
         $payment->paid = $paid;
         $payment->type = $type;
+        $payment->comment = $comment;
         $payment->save();
     }
 

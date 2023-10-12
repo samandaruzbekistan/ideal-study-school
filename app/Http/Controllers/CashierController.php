@@ -291,11 +291,11 @@ class CashierController extends Controller
         if ($amount > $payment->indebtedness) return back()->with('amount_error',1);
         if (!$payment) return back()->with('payment_error',1);
         if (($request->has('status')) || ($amount == $payment->indebtedness)){
-            $this->monthlyPaymentRepository->payment($payment->id, 0, $amount,$request->type, 1);
+            $this->monthlyPaymentRepository->payment($payment->id, 0, $amount,$request->type, 1, $request->comment);
             $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y'), $payment->id);
         }
         else{
-            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type);
+            $this->monthlyPaymentRepository->addPayment($payment->student_id,$student->class_id,0,$payment->month,$amount, $request->type, $request->comment);
             $amount2 = $payment->indebtedness - $amount;
             $id = $this->monthlyPaymentRepository->updatePayment($payment->id, $amount2);
             $this->smsService->sendReceip($student->phone, $student->name, $request->amount, date('d.m.Y'), Carbon::parse($payment->month)->format('F Y') , $id);

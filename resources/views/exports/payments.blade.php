@@ -9,6 +9,7 @@
         <th>To'lov turi</th>
         <th>To'lov oyi</th>
         <th>To'lov sanasi</th>
+        <th>Izox</th>
         <!-- Add more columns as needed -->
     </tr>
     </thead>
@@ -23,6 +24,7 @@
             <td>{{ $payment->paid }}</td>
             <td>{{ \Carbon\Carbon::parse($payment->date)->format('F Y') }}</td>
             <td>{{ $payment->date }}</td>
+            <td>{{ $payment->comment }}</td>
             <!-- Add more columns as needed -->
         </tr>
     @endforeach

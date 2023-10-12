@@ -110,7 +110,7 @@
                                                 <th>O'quv oyi</th>
                                                 <th>Summa</th>
                                                 <th>Sana</th>
-                                                <th>Print</th>
+                                                <th>Izox</th>
                                             </tr>
                                         </thead>
                                         <tbody class="old-data">
@@ -120,7 +120,7 @@
                                                     <td>{{ \Carbon\Carbon::parse($payment->month)->format('F Y') }}</td>
                                                     <td>{{ number_format($payment->paid, 0, '.', ' ') }}</td>
                                                     <td>{{ $payment->date  }}</td>
-                                                    <td class=""><button type="button" class="btn btn-success"><i class="align-middle" data-feather="printer"></i></button></td>
+                                                    <td>{{ $payment->comment  }}</td>
                                                 </tr>
                                             @endif
                                         @endforeach
