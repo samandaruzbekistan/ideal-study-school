@@ -23,31 +23,34 @@
                             <h6 class="card-subtitle text-danger">Chekni chiqarishni unutmang.</h6>
                         </div>
                         <div class="card-body border m-1" id="printContent">
-                            <div class="row ps-5 pe-5">
-                                <img src="{{ asset('logo-white.png') }}" class="img-fluid">
+                            <div class="h1 text-center">
+                                Ideal Study NTM
                             </div>
-                            <h1 class="text-center "><b>To'landi</b></h1>
-                            <div class="row h4 justify-content-between border-bottom">
+                            <h2 class="text-center "><b>To'landi</b></h2>
+                            <div class="row h5 justify-content-between border-bottom">
                                 <b class="col mb-0">Sana:</b>
                                 <p class="col mb-0 text-end" id="date">{{ date('d-m-Y') }}</p>
                             </div>
-                            <div class="row h4 justify-content-between">
+                            <div class="row h5 justify-content-between">
                                 <b class="col-3 mb-0">F.I.SH:</b>
                                 <p class="col mb-0 text-end" id="name">Samandar Sariboyev</p>
                             </div>
-                            <div class="row h4 justify-content-between">
+                            <div class="row h5 justify-content-between">
                                 <b class="col-3 mb-0">Sinf:</b>
                                 <p class="col mb-0 text-end" id="subject">English pre intermediate</p>
                             </div>
-                            <div class="row h4 justify-content-between">
+                            <div class="row h5 justify-content-between">
                                 <b class="col-4 mb-0">O'quv oyi:</b>
                                 <p class="col mb-0 text-end" id="month">Sentabr</p>
                             </div>
                             <div class="row h2 text-center border-bottom border-top">
                                 <b class="col mb-0" id="amount">300 000 so'm</b>
                             </div>
-                            <div id="qrcode" class="text-center d-flex justify-content-center">
+                            <div id="qrcode" class="text-center d-flex justify-content-center mb-4">
 
+                            </div>
+                            <div class="">
+                                .
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between">
