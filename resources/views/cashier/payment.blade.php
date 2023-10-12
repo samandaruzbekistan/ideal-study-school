@@ -346,7 +346,7 @@
             $('#qrcode').empty()
             // generate qr code
             var qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: "https://maktab.ideal-study.uz/receip/"+payment_id,
+                text: "https://maktab.ideal-study.uz/receipt/"+payment_id,
                 width: 200,
                 height: 200,
                 colorDark : "#000000",
