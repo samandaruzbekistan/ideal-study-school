@@ -55,7 +55,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-6">
                                         <label class="form-label">Summa</label>
-                                        <input required name="amount" min="0" type="number"class="form-control" placeholder="">
+                                        <input required name="amount" type="text"  oninput="formatPaymentAmount(this)" class="form-control" placeholder="">
                                     </div>
                                     <div class="mb-3 col-6">
                                         <label class="form-label">Sana</label>
@@ -167,6 +167,17 @@
                 }
             });
         });
+
+        function formatPaymentAmount(input) {
+            // Remove existing non-numeric characters
+            const numericValue = input.value.replace(/\D/g, '');
+
+            // Add thousand separators
+            const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+            // Update the input field with the formatted value
+            input.value = formattedValue;
+        }
 
         @if($errors->any())
         const notyf = new Notyf();

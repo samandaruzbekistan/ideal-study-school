@@ -334,11 +334,12 @@ class CashierController extends Controller
     public function add_outlay(Request $request){
         $request->validate([
             'type_id' => 'required|numeric',
-            'amount' => 'required|numeric',
             'date' => 'required|date',
             'description' => 'required|string',
         ]);
-        $this->outlayRepository->addOutlay($request->type_id, $request->amount, $request->date, session('id'), $request->description);
+        $amountString = str_replace([' ', ','], '', $request->input('amount'));
+        $amount = (float) $amountString;
+        $this->outlayRepository->addOutlay($request->type_id, $amount, $request->date, session('id'), $request->description);
         return back()->with('success',1);
     }
 
