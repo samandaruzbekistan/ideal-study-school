@@ -42,6 +42,7 @@ Route::prefix('admin')->group(function () {
         Route::get('cashiers',[AdminController::class, 'cashiers'])->name('admin.cashiers');
         Route::post('cashier-add',[AdminController::class, 'add_cashier'])->name('admin.new.cashier');
         Route::post('update-cashier',[AdminController::class, 'update_cashier'])->name('admin.update.cashier');
+        Route::get('system-lock', [AdminController::class, 'system_lock'])->name('admin.system.lock');
 
 
         Route::get('payments', [AdminController::class, 'payments'])->name('admin.payments');
@@ -87,12 +88,12 @@ Route::prefix('teacher')->group(function () {
     });
 });
 
-Route::middleware(['access'])->group(function () {
+Route::middleware(['access', 'admin_blocked'])->group(function () {
     Route::view('/cashier', 'cashier.login')->name('cashier.login');
     Route::post('cashier/auth', [CashierController::class, 'auth'])->name('cashier.auth');
 });
 Route::prefix('cashier')->group(function () {
-    Route::middleware(['cashier_auth','access'])->group(function () {
+    Route::middleware(['cashier_auth','access', 'admin_blocked'])->group(function () {
         Route::get('home', [CashierController::class, 'home'])->name('cashier.home');
         Route::get('payment', [CashierController::class, 'payment'])->name('cashier.payment');
         Route::get('logout', [CashierController::class, 'logout'])->name('cashier.logout');

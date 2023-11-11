@@ -88,7 +88,10 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title">Kassirlar ro'yhati</h5>
-                        <button class="btn btn-primary add"><i class="align-middle" data-feather="user-plus"></i> Qo'shish</button>
+                        <div>
+                            <a class="btn btn-danger" href="{{ route('admin.system.lock') }}"><i class="align-middle" data-feather="lock"></i> Tizimni yopish</a>
+                            <button class="btn btn-primary add"><i class="align-middle" data-feather="user-plus"></i> Qo'shish</button>
+                        </div>
                     </div>
                     <table class="table table-striped table-hover">
                         <thead>
@@ -147,6 +150,20 @@
             $('.edit-forma').show();
             $('.teachers').hide();
         });
+
+        @if(session('system_locked') == 1)
+        const notyf = new Notyf();
+
+        notyf.success({
+            message: 'Tizim yopildi!',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
 
         @if($errors->any())
         const notyf = new Notyf();

@@ -47,16 +47,6 @@
                             </ul>
                         </div>
                         <hr class="my-0">
-{{--                        <div class="card-body">--}}
-{{--                            <h5 class="h6 card-title">Elsewhere</h5>--}}
-{{--                            <ul class="list-unstyled mb-0">--}}
-{{--                                <li class="mb-1"><a href="#">staciehall.co</a></li>--}}
-{{--                                <li class="mb-1"><a href="#">Twitter</a></li>--}}
-{{--                                <li class="mb-1"><a href="#">Facebook</a></li>--}}
-{{--                                <li class="mb-1"><a href="#">Instagram</a></li>--}}
-{{--                                <li class="mb-1"><a href="#">LinkedIn</a></li>--}}
-{{--                            </ul>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-9">

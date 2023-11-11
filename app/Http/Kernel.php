@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AdminAuth;
+use App\Http\Middleware\AdminBlocked;
 use App\Http\Middleware\CashierAuth;
 use App\Http\Middleware\CombinedAuth;
 use App\Http\Middleware\TeacherAuth;
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'teacher_auth' => TeacherAuth::class,
         'combined_auth' => CombinedAuth::class,
         'access' => TimeBasedAccess::class,
+        'admin_blocked' => AdminBlocked::class,
     ];
 }
