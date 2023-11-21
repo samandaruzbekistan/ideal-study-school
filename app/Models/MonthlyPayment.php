@@ -14,6 +14,11 @@ class MonthlyPayment extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
+    public function cashier()
+    {
+        return $this->belongsTo(Cashier::class, 'cashier_id');
+    }
+
     public function classes()
     {
         return $this->belongsTo(Classes::class, 'class_id');
