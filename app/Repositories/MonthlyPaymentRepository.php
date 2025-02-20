@@ -206,4 +206,12 @@ class MonthlyPaymentRepository
             ->where('student_id',$student_id)
             ->delete();
     }
+
+    public function change_all_not_paid_amount($id,$old_amount, $amount){
+        MonthlyPayment::where('student_id', $id)
+            ->where('indebtedness', $old_amount)
+            ->update([
+                'indebtedness' => $amount
+            ]);
+    }
 }

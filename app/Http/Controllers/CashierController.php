@@ -184,7 +184,7 @@ class CashierController extends Controller
         $price = $amount;
         $daysInMonth = $carbonDate->daysInMonth;
         $rowsToInsert = [];
-        if ($currentMonth > 8){
+        if ($currentMonth > 7){
             for ($month = $currentMonth; $month <= 12; $month++){
                 $row = [
                     'student_id' => $student_id,
@@ -206,7 +206,7 @@ class CashierController extends Controller
                 $rowsToInsert[] = $row;
             }
         }
-        elseif ($currentMonth <= 8){
+        elseif ($currentMonth <= 7){
             for ($month = $currentMonth; $month <= 8; $month++){
                 $row = [
                     'student_id' => $student_id,

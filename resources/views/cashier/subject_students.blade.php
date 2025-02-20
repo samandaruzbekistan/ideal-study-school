@@ -77,6 +77,35 @@
         </div>
     </main>
 
+    <main class="content edit-payment" style="padding-bottom: 0; display: none">
+        <div class="container-fluid p-0">
+            <div class="col-md-8 col-xl-9">
+                <div class="">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0"><span id="st_name2" class="text-danger"></span> ni to'lovini o'zgartirish</h5>
+                        </div>
+                        <div class="card-body h-100">
+                            <form action="{{ route('manager.student.payment.change') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="student_id" id="student_id2">
+                                <p>Eski summa: <span class="text-danger text-body" id="old-sum"></span></p>
+                                <div class="mb-3">
+                                    <label for="new-summa" class="form-label">Yangi summa</label> <sup class="text-danger">*</sup>
+                                    <input required type="text" name="new_summa" oninput="formatPaymentAmount(this)" id="new-summa" class="form-control">
+                                </div>
+                                <div class=" text-end">
+                                    <button type="button" class="btn btn-danger cancel-payment">Bekor qilish</button>
+                                    <button type="submit" class="btn btn-success">Ko'chirish</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <main class="content teachers">
         <div class="container-fluid p-0 ">
             <div class="col-12 col-xl-12" id="datas">
@@ -87,17 +116,19 @@
                             <a class="btn btn-sm btn-light active" data-bs-toggle="list" href="#students" role="tab" aria-selected="true">
                                 O'quvchilar
                             </a>
-                            <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#payments" role="tab" aria-selected="true">
-                                To'lov jadvali
-                            </a>
+                            @if(!session()->has('manager'))
+                                <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#payments" role="tab" aria-selected="true">
+                                    To'lov jadvali
+                                </a>
 
-                            <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#payments_by_month" role="tab" aria-selected="true">
-                                Tushumlar
-                            </a>
+                                <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#payments_by_month" role="tab" aria-selected="true">
+                                    Tushumlar
+                                </a>
 
-                            <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#sms" role="tab" aria-selected="true">
-                                SMS xizmati
-                            </a>
+                                <a class="btn btn-sm btn-light" data-bs-toggle="list" href="#sms" role="tab" aria-selected="true">
+                                    SMS xizmati
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="tab-content">
@@ -167,9 +198,14 @@
                                     <th>#</th>
                                     <th>F.I.Sh</th>
                                     <th class="d-none d-sm-table-cell">Telefon</th>
-                                    <th>Sinf chiqarish</th>
-                                    <th>Ko'chirish</th>
-                                    <th>O'chirish</th>
+                                    @if(session()->has('manager'))
+                                        <th>Sinf chiqarish</th>
+                                    @endif
+                                        <th>Ko'chirish</th>
+                                    @if(session()->has('manager'))
+                                        <th>To'lovni o'zgartirish</th>
+                                        <th>O'chirish</th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody id="tbody">
@@ -180,9 +216,14 @@
                                         </td>
                                         <td><a href="{{ route('cashier.student') }}/{{ $student->id }}">{{ $student->name }}</a></td>
                                         <td class="d-none d-sm-table-cell">+{{ preg_replace('/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/', '$1 $2 $3 $4 $5', $student->phone) }}</td>
-                                        <td><button name="{{ $student->name }}" id="{{ $student->id }}" class="btn btn-warning text-dark chiqarish"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x align-middle me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg></button></td>
-                                        <td><button id="{{ $student->id }}" ismi="{{ $student->name }}" class="btn btn-info transfer-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw align-middle me-2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></button></td>
-                                        <td><a href="{{ route('student.delete', ['id' => $student->id]) }}" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 align-middle me-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></td>
+                                        @if(session()->has('manager'))
+                                            <td><button name="{{ $student->name }}" id="{{ $student->id }}" class="btn btn-warning text-dark chiqarish"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg></button></td>
+                                        @endif
+                                            <td><button id="{{ $student->id }}" ismi="{{ $student->name }}" class="btn btn-info transfer-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw align-middle"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></button></td>
+                                        @if(session()->has('manager'))
+                                            <td><button id="{{ $student->id }}" ismi="{{ $student->name }}" summa="{{ $student->contribution }}" class="btn btn-bitbucket  payment-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg></button></td>
+                                            <td><a href="{{ route('student.delete', ['id' => $student->id]) }}" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -306,6 +347,38 @@
             $('.edit-forma').hide();
             $('.teachers').show();
         });
+
+
+
+
+        $(".payment-button").on("click", function() {
+            let id = $(this).attr('id');
+            let ism = $(this).attr('ismi');
+            let summa = $(this).attr('summa');
+            $('#student_id2').val(id);
+            $('#st_name2').text(ism);
+            $('#old-sum').text(summa);
+            $('.edit-payment').show();
+            $('.teachers').hide();
+        });
+
+        $(".cancel-payment").on("click", function() {
+            event.stopPropagation();
+            $('.edit-payment').hide();
+            $('.teachers').show();
+        });
+
+
+        function formatPaymentAmount(input) {
+            // Remove existing non-numeric characters
+            const numericValue = input.value.replace(/\D/g, '');
+
+            // Add thousand separators
+            const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+            // Update the input field with the formatted value
+            input.value = formattedValue;
+        }
 
 
         (function (factory) {
@@ -537,6 +610,20 @@
 
         notyf.success({
             message: 'O\'quvchi tizimdan o\'chirildi',
+            duration: 5000,
+            dismissible : true,
+            position: {
+                x : 'center',
+                y : 'top'
+            },
+        });
+        @endif
+
+        @if(session('success_update') == 1)
+        const notyf = new Notyf();
+
+        notyf.success({
+            message: 'Malumotlar yangilandi',
             duration: 5000,
             dismissible : true,
             position: {

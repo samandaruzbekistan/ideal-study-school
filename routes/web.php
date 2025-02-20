@@ -4,6 +4,7 @@ use App\Exports\DebtExport;
 use App\Exports\PaymentsExport;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/admin', 'admin.login')->name('admin.login');
 Route::view('/teacher', 'teacher.login')->name('teacher.login');
+Route::view('/manager', 'manager.login')->name('manager.login');
 Route::view('/access-403', 'access')->name('access');
 Route::redirect('/','teacher');
 
@@ -68,6 +70,13 @@ Route::prefix('admin')->group(function () {
         Route::get('admin_outlay',[AdminController::class, 'admin_outlay'])->name('admin.outlay');
         Route::post('admin_outlay-new',[AdminController::class, 'admin_new_outlay'])->name('admin.new.outlay');
         Route::get('admin_outlay-delete/{id?}',[AdminController::class, 'admin_delete_outlay'])->name('admin.delete.outlay');
+    });
+});
+
+Route::prefix('manager')->group(function () {
+    Route::post('/auth', [ManagerController::class, 'auth'])->name('manager.auth');
+    Route::middleware(['cashier_auth'])->group(function () {
+        Route::post('change-student-payment', [ManagerController::class, 'change_payment'])->name('manager.student.payment.change');
     });
 });
 

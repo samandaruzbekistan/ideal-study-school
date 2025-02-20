@@ -475,7 +475,7 @@
                                  <td>
                                     <button payment_id="${payment.id}" subject="${payment.classes.name}"
                                             amount="${formattedAmount}"
-                                            month="${formattedMonth}" name="${payment.student.name}"
+                                            month="${payment.month}" name="${payment.student.name}"
                                             date="${payment.date}" class="btn btn-outline-primary chek-button ">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

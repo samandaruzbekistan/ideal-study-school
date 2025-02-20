@@ -28,6 +28,12 @@ class StudentRepository
         $st->save();
     }
 
+    public function update_contribution($id, $contribution){
+        Student::where('id', $id)->update([
+            'contribution' => $contribution
+        ]);
+    }
+
     public function add_student($name,$class_id,$phone, $r_id, $d_id, $q_id, $date, $p){
         $st = new Student;
         $st->name = $name;

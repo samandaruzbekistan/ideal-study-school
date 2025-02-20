@@ -13,7 +13,7 @@ class OutlayRepository
     }
 
     public function getOutlaysWithTypes(){
-        return Outlay::with('types')->latest()->get();
+        return Outlay::with('types')->latest()->paginate(100);
     }
 
     public function getOutlayTypeByName($name){

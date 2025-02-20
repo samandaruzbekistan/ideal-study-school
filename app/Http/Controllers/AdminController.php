@@ -43,6 +43,42 @@ class AdminController extends Controller
     {
     }
 
+    public function newYear($class_id)
+    {
+        $startDate = Carbon::createFromDate(2024, 9, 1);
+        $endDate = Carbon::createFromDate(2025, 8, 1);
+        $totalAmount = 2750000;
+        $monthlyAmount = $totalAmount / 12;
+        
+        // Get the list of students and their class IDs
+        $students = DB::table('students')->get();
+    
+        // Insert payment records for each student for each month
+        foreach ($students as $student) {
+            $currentDate = clone $startDate; // Clone the start date for each student
+            while ($currentDate <= $endDate) {
+                DB::table('monthly_payments')->insert([
+                    'student_id' => $student->id,
+                    'class_id' => $student->class_id,
+                    'status' => 0, // default status, adjust as needed
+                    'month' => $currentDate->toDateString(),
+                    'type' => 'cash', // or other payment type as needed
+                    'indebtedness' => $totalAmount, // Correct this to monthly amount
+                    'paid' => 0, // default paid amount, adjust as needed
+                    'cashier_id' => null, // set if necessary
+                    'date' => null, // set if necessary
+                    'comment' => '', // set if necessary
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+    
+                // Move to the next month
+                $currentDate->addMonth();
+            }
+        }
+        return "ok";
+    }
+
 
     //    Auth
     public function auth(LoginRequest $request){

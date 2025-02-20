@@ -32,18 +32,18 @@
 
             <ul class="sidebar-nav">
 
-
-                <li class="sidebar-item @yield('home')">
-                    <a class="sidebar-link" href="{{ route('cashier.home') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> <span class="align-middle">Bosh sahifa</span>
-                    </a>
-                </li>
-                <li class="sidebar-item @yield('payment')">
-                    <a class="sidebar-link" href="{{ route('cashier.payment') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle align-middle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg> <span class="align-middle">To'lov</span>
-                    </a>
-                </li>
-
+                @if(!session()->has('manager'))
+                    <li class="sidebar-item @yield('home')">
+                        <a class="sidebar-link" href="{{ route('cashier.home') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> <span class="align-middle">Bosh sahifa</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item @yield('payment')">
+                        <a class="sidebar-link" href="{{ route('cashier.payment') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle align-middle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg> <span class="align-middle">To'lov</span>
+                        </a>
+                    </li>
+                @endif
 
 
 
@@ -63,64 +63,66 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item @yield('outlays')">
-                    <a class="sidebar-link" href="{{ route('cashier.outlays') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-circle align-middle"><circle cx="12" cy="12" r="10"></circle><polyline points="16 12 12 8 8 12"></polyline><line x1="12" y1="16" x2="12" y2="8"></line></svg> <span class="align-middle">Xarajatlar</span>
-                    </a>
-                </li>
+                @if(!session()->has('manager'))
+                    <li class="sidebar-item @yield('outlays')">
+                        <a class="sidebar-link" href="{{ route('cashier.outlays') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-circle align-middle"><circle cx="12" cy="12" r="10"></circle><polyline points="16 12 12 8 8 12"></polyline><line x1="12" y1="16" x2="12" y2="8"></line></svg> <span class="align-middle">Xarajatlar</span>
+                        </a>
+                    </li>
 
 
-                <li class="sidebar-header">
-                    Malumotlar
-                </li>
+                    <li class="sidebar-header">
+                        Malumotlar
+                    </li>
 
-                <li class="sidebar-item @yield('payments')">
-                    <a class="sidebar-link" href="{{ route('cashier.payments.all') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 align-middle"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> <span class="align-middle">To'lovlar</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item @yield('payments')">
+                        <a class="sidebar-link" href="{{ route('cashier.payments.all') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 align-middle"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> <span class="align-middle">To'lovlar</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-item @yield('attendance')">
-                    <a class="sidebar-link" href="{{ route('cashier.attendance.subjects') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg> <span class="align-middle">Davomat</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item @yield('attendance')">
+                        <a class="sidebar-link" href="{{ route('cashier.attendance.subjects') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check align-middle"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg> <span class="align-middle">Davomat</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-item @yield('statistics')">
-                    <a class="sidebar-link" href="{{ route('export.payments') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase align-middle me-2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> <span class="align-middle">Statistika</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item @yield('statistics')">
+                        <a class="sidebar-link" href="{{ route('export.payments') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase align-middle me-2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> <span class="align-middle">Statistika</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-item @yield('statistics')">
-                    <a class="sidebar-link" href="{{ route('export.payments.debt') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle align-middle me-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> <span class="align-middle">Qarzdorlar</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item @yield('statistics')">
+                        <a class="sidebar-link" href="{{ route('export.payments.debt') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle align-middle me-2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> <span class="align-middle">Qarzdorlar</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-item @yield('salaries')">
-                    <a class="sidebar-link" href="{{ route('cashier.salaries') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share align-middle me-2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> <span class="align-middle">Oldindan oylik</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item @yield('salaries')">
+                        <a class="sidebar-link" href="{{ route('cashier.salaries') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share align-middle me-2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> <span class="align-middle">Oldindan oylik</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-header">
-                    Xizmatlar
-                </li>
-                <li class="sidebar-item @yield('sms')">
-                    <a class="sidebar-link" href="{{ route('cashier.sms') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle align-middle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> <span class="align-middle">Sms xizmati</span>
-                    </a>
-                </li>
+                    <li class="sidebar-header">
+                        Xizmatlar
+                    </li>
+                    <li class="sidebar-item @yield('sms')">
+                        <a class="sidebar-link" href="{{ route('cashier.sms') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle align-middle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> <span class="align-middle">Sms xizmati</span>
+                        </a>
+                    </li>
 
-                <li class="sidebar-header">
-                    Profil
-                </li>
-                <li class="sidebar-item @yield('profile')">
-                    <a class="sidebar-link" href="{{ route('cashier.profile') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user align-middle"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span class="align-middle">Profil</span>
-                    </a>
-                </li>
+                    <li class="sidebar-header">
+                        Profil
+                    </li>
+                    <li class="sidebar-item @yield('profile')">
+                        <a class="sidebar-link" href="{{ route('cashier.profile') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user align-middle"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span class="align-middle">Profil</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
 
 

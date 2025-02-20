@@ -145,7 +145,9 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title mb-0">O'quvchilar ro'yhati</h5>
-                        <button class="btn btn-primary add ms-2">+ Yangi o'quvchi</button>
+                        @if(!session()->has('manager'))
+                            <button class="btn btn-primary add ms-2">+ Yangi o'quvchi</button>
+                        @endif
                     </div>
                     <table class="table table-striped table-hover table-responsive">
                         <thead>

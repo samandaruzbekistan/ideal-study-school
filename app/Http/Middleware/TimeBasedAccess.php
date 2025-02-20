@@ -19,9 +19,9 @@ class TimeBasedAccess
         $currentTime = now()->format('H:i');
 
         // Define the allowed time range (from 6:00 AM to 8:00 PM)
-        $startTime = '06:00';
+        $startTime = '04:00';
         $endTime = '20:00';
-
+        //return $next($request);
         // Check if the current time is within the allowed range
         if ($currentTime >= $startTime && $currentTime <= $endTime) {
             // If the current time is within the allowed range, proceed with the request
