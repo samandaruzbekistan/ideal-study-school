@@ -109,7 +109,7 @@
                                             </div>
                                             <input type="hidden" name="student_id" value="{{ $student->id }}">
                                             <div class="text-end">
-                                                <button type="submit" class="btn btn-s">Yangilash</button>
+                                                <button type="submit" class="btn btn-primary">Yangilash</button>
                                             </div>
                                         </form>
                                     </div>
@@ -287,8 +287,8 @@
             duration: 5000,
             dismissible : true,
             position: {
-                x : 'center',
-                y : 'top'
+                x : 'right',
+                y : 'bottom'
             },
         });
         @endif

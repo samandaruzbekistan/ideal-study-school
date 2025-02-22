@@ -76,7 +76,7 @@ class ManagerController extends Controller
 
         $this->studentRepository->update_id_card($request->student_id, $request->id_card);
 
-        return back()->with('success_update',1);
+        return back()->with('updated',1);
     }
 
 }
