@@ -97,4 +97,10 @@ class StudentRepository
     public function getStudentByIdCard($id_card){
         return Student::where('id_card', $id_card)->first();
     }
+
+    public function update_id_card($student_id, $id_card){
+        Student::where('id', $student_id)->update([
+            'id_card' => $id_card
+        ]);
+    }
 }

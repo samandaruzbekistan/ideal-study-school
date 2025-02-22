@@ -151,6 +151,8 @@ Route::prefix('cashier')->group(function () {
         Route::get('attendance-detail/{subject_id?}/{month?}',[TeacherController::class, 'attendance_detail'])->name('cashier.attendance.detail');
         Route::get('day-detail/{id?}',[TeacherController::class, 'attendance_detail_day'])->name('cashier.attendance.day');
 
+//        Id card control
+        Route::post('update-id-card-student', [ManagerController::class, 'update_id_card'])->name('update.student.id.card');
 
     });
 });

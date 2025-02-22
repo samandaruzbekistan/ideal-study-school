@@ -68,5 +68,15 @@ class ManagerController extends Controller
         return redirect()->route('manager.login');
     }
 
+    public function update_id_card(Request $request){
+        $request->validate([
+            'student_id' => 'required|numeric',
+            'id_card' => 'required|string'
+        ]);
+
+        $this->studentRepository->update_id_card($request->student_id, $request->id_card);
+
+        return back()->with('success_update',1);
+    }
 
 }

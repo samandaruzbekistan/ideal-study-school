@@ -68,7 +68,7 @@
                                     </div>
                                     <hr class="my-0">
                                 </div>
-                                <div class="card col-md-6 col-xl-5 d-inline-block">
+                                <div class="card col-md-6 col-xl-4 me-3">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">Malumotlarni yangilash</h5>
                                     </div>
@@ -91,7 +91,27 @@
                                                 <button type="submit" class="btn btn-primary">Saqlash</button>
                                             </div>
                                         </form>
+                                        <hr>
 
+                                    </div>
+                                </div>
+                                <div class="card col-md-6 col-xl-3 d-inline-block">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">Id Card yangilash</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Hozirgi id card: {{ $student->id_card }}</h6>
+                                        <form action="{{ route('update.student.id.card') }}" method="post">
+                                            @csrf
+                                            <div class="mb-3">
+                                                <label class="form-label" for="inputFirstName">ID Card raqami</label>
+                                                <input type="text" name="id_card" class="form-control" id="inputFirstName" placeholder="Id card number">
+                                            </div>
+                                            <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-s">Yangilash</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
